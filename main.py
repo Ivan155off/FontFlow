@@ -9,7 +9,7 @@ INDEX_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FONT FLOW | Pro Max</title>
+    <title>FONT FLOW | Ultimate</title>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2712778222245542" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -32,53 +32,49 @@ INDEX_HTML = """
             border: 1px solid rgba(255,255,255,0.1); color: #fff; font-size: 1.1rem;
             outline: none; box-sizing: border-box; transition: 0.3s;
         }
-        textarea:focus { border-color: var(--p); box-shadow: 0 0 20px rgba(0,255,136,0.15); }
         .results { margin-top: 20px; display: grid; gap: 12px; width: 100%; }
         
-        /* КАРТОЧКА И КНОПКА */
         .card {
             background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
             padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;
-            align-items: center; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            align-items: center; cursor: pointer; transition: 0.3s;
+            /* ФИКС БАГА С ДЛИННЫМ ТЕКСТОМ */
+            overflow: hidden; 
         }
-        .card:hover { border-color: var(--p); transform: translateY(-2px); background: rgba(255,255,255,0.07); }
-        .card span { font-size: 1.1rem; text-align: left; word-break: break-all; flex: 1; padding-right: 10px; color: #eee; }
+        .card:hover { border-color: var(--p); background: rgba(255,255,255,0.07); }
+        
+        .card span { 
+            font-size: 1.1rem; text-align: left; 
+            flex: 1; padding-right: 10px; color: #eee;
+            /* ФИКС ПЕРЕНОСА СТРОК */
+            overflow-wrap: anywhere; 
+            white-space: pre-wrap;
+        }
         
         .copy-btn { 
             background: var(--p); color: #000; padding: 7px 14px; border-radius: 8px; 
             font-weight: 900; font-size: 0.6rem; text-transform: uppercase;
-            transition: 0.2s; position: relative; overflow: hidden;
+            flex-shrink: 0; /* Чтобы кнопка не сжималась */
         }
-
-        /* Анимация клика */
-        .card:active .copy-btn {
-            transform: scale(0.9);
-            background: #fff;
-        }
-        
-        .copied-state {
-            background: var(--s) !important;
-            color: #fff !important;
-            box-shadow: 0 0 15px var(--s);
-        }
-
-        .ad-unit { width: 100%; height: 60px; border: 1px dashed #222; margin: 15px 0; display: flex; align-items: center; justify-content: center; color: #222; font-size: 8px; }
+        .copied-state { background: var(--s) !important; color: #fff !important; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>FONT FLOW</h1>
-        <div class="tagline">Ultra Stable Edition</div>
+        <div class="tagline">Fixed & Styled</div>
         <textarea id="input" placeholder="Введите текст..."></textarea>
         <div id="output" class="results"></div>
     </div>
     <script>
         const FONTS = {
-            "Glitched": "A̷B̷C̷D̷E̷F̷G̷H̷I̷J̷K̷L̷M̷N̷O̷P̷Q̷R̷S̷T̷U̷V̷W̷X̷Y̷Z̷a̷b̷c̷d̷e̷f̷g̷h̷i̷j̷k̷l̷m̷n̷o̷p̷q̷r̷s̷t̷u̷v̷w̷x̷y̷z̷",
+            "Italic": "𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻",
+            "Underline": "A̲B̲C̲D̲E̲F̲G̲H̲I̲J̲K̲L̲M̲N̲O̲P̲Q̲R̲S̲T̲U̲V̲W̲X̲Y̲Z̲a̲b̲c̲d̲e̲f̲g̲h̲i̲j̲k̲l̲m̲n̲o̲p̲q̲r̲s̲t̲u̲v̲w̲x̲y̲z̲",
+            "Strike": "A̶B̶C̶D̶E̶F̶G̶H̶I̶J̶K̶L̶M̶N̶O̶P̶Q̶R̶S̶T̶U̶V̶W̶X̶Y̶Z̶a̶b̶c̶d̶e̶f̶g̶h̶i̶j̶k̶l̶m̶n̶o̶p̶q̶r̶s̶t̶u̶v̶w̶x̶y̶z̶",
             "Bubbles": "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ",
             "Wide": "ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ",
             "Small Caps": "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ",
-            "Upside Down": "ɐqɔpǝɟƃɥᴉɾʞꞁɯuodbɹsʇnʌʍxʎzⱯᗷᑐᗡEᖵᘐHIᘀKꞀWNOᗡᑐᖴS⊥∩ΛM᙭⅄Z"
+            "Upside": "ɐqɔpǝɟƃɥᴉɾʞꞁɯuodbɹsʇnʌʍxʎzⱯᗷᑐᗡEᖵᘐHIᘀKꞀWNOᗡᑐᖴS⊥∩ΛM᙭⅄Z"
         };
         const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         const input = document.getElementById('input');
@@ -91,7 +87,7 @@ INDEX_HTML = """
 
             Object.keys(FONTS).forEach(key => {
                 let res = "";
-                let textToProcess = (key === "Upside Down") ? val.split("").reverse().join("") : val;
+                let textToProcess = (key === "Upside") ? val.split("").reverse().join("") : val;
                 
                 for(let c of textToProcess) {
                     let i = alpha.indexOf(c);
