@@ -3,6 +3,7 @@ import os
 
 app = Flask(__name__)
 
+# Основной HTML интерфейс
 INDEX_HTML = """
 <!DOCTYPE html>
 <html lang="en">
@@ -40,15 +41,7 @@ INDEX_HTML = """
         }
         .description { color: #aaa; font-size: 0.9rem; margin-bottom: 25px; opacity: 0.8; }
         
-        /* Рекламные контейнеры */
-        .ad-container { width: 100%; overflow: hidden; margin: 15px 0; border-radius: 10px; background: rgba(255,255,255,0.02); }
-        .pc-only { display: block; }
-        .mobile-only { display: none; }
-
-        @media (max-width: 600px) {
-            .pc-only { display: none; }
-            .mobile-only { display: block; }
-        }
+        .ad-box { width: 100%; min-height: 50px; margin: 15px 0; border-radius: 10px; background: rgba(255,255,255,0.02); overflow: hidden; }
 
         textarea {
             width: 100%; padding: 20px; border-radius: 15px; 
@@ -57,7 +50,9 @@ INDEX_HTML = """
             backdrop-filter: blur(10px);
         }
         textarea:focus { border-color: var(--p); background: rgba(255,255,255,0.06); }
+        
         .results { margin-top: 25px; display: grid; gap: 12px; width: 100%; }
+        
         .card {
             background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
             padding: 16px 20px; border-radius: 14px; display: flex; justify-content: space-between;
@@ -66,34 +61,25 @@ INDEX_HTML = """
         }
         .card:hover { transform: translateY(-2px); border-color: var(--p); background: rgba(255,255,255,0.05); }
         .card span { font-size: 1.2rem; text-align: left; flex: 1; padding-right: 15px; overflow-wrap: anywhere; }
+        
         .copy-btn { 
             background: rgba(255,255,255,0.08); color: #fff; padding: 8px 16px; 
             border-radius: 10px; font-weight: 700; font-size: 0.7rem; 
             text-transform: uppercase; transition: 0.3s; min-width: 85px; text-align: center;
         }
         .card:hover .copy-btn { background: var(--p); color: #000; }
-        .copied .copy-btn { background: var(--s) !important; color: #fff !important; box-shadow: 0 0 15px var(--s); }
+        .copied .copy-btn { background: var(--s) !important; color: #fff !important; }
     </style>
 </head>
 <body>
     <div class="bg-blobs"><div class="blob blob1"></div><div class="blob blob2"></div></div>
     <div class="container">
-        <div class="ad-container pc-only">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-2712778222245542"
-                 data-ad-slot="auto"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-        </div>
-
         <h1>FONT FLOW</h1>
         <div class="description">Elevate your style for social media and games</div>
         
         <textarea id="input" placeholder="Type your text here..."></textarea>
         
-        <div class="ad-container mobile-only">
+        <div class="ad-box">
             <ins class="adsbygoogle"
                  style="display:block"
                  data-ad-client="ca-pub-2712778222245542"
@@ -109,10 +95,9 @@ INDEX_HTML = """
     <script>
         const FONTS = {
             "Italic": "𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻",
-            "Underline": "A̲B̲C̲D̲E̲F̲G̲H̲I̲J̲K̲L̲M̲N̲O̲P̲Q̲R̲S̲T̲U̲V̲W̲X̲Y̲Z̲a̲b̲c̲d̲e̲f̲g̲h̲i̲j̲k̲l̲m̲n̲o̲p̲q̲r̲s̲t̲u̲v̲w̲x̲y̲z̲",
-            "Strike": "A̶B̶C̶D̶E̶F̶G̶H_I̶J̶K̶L̶M̶N̶O̶P̶Q̶R̶S̶T̶U̶V̶W̶X̶Y̶Z̶a̶b̶c̲d̲e̲f̲g̲h̶i̶j̶k̶l̶m̶n̶o̶p̶q̶r̶s̶t̶u̶v̶w̶x̶y̶z̶",
+            "Bold": "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳",
+            "Monospace": "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣",
             "Bubbles": "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ",
-            "Wide": "ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ",
             "Small Caps": "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ",
             "Upside": "ɐqɔpǝɟƃɥᴉɾʞꞁɯuodbɹsʇnʌʍxʎzⱯᗷᑐᗡEᖵᘐHIᘀKꞀWNOᗡᑐᖴS⊥∩ΛM᙭⅄Z"
         };
@@ -136,15 +121,10 @@ INDEX_HTML = """
                 div.className = 'card';
                 div.innerHTML = "<span>" + res + "</span><div class='copy-btn'>COPY</div>";
                 div.onclick = function() {
-                    const el = document.createElement('textarea');
-                    el.value = res;
-                    document.body.appendChild(el);
-                    el.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(el);
+                    navigator.clipboard.writeText(res);
                     div.classList.add('copied');
                     div.querySelector('.copy-btn').innerText = "DONE!";
-                    setTimeout(function() {
+                    setTimeout(() => {
                         div.classList.remove('copied');
                         div.querySelector('.copy-btn').innerText = "COPY";
                     }, 1200);
@@ -160,6 +140,13 @@ INDEX_HTML = """
 @app.route('/')
 def index():
     return render_template_string(INDEX_HTML)
+
+# Тот самый маршрут для файла ads.txt
+@app.route('/ads.txt')
+def ads_txt():
+    # Твоя строка авторизации для Google
+    content = "google.com, pub-2712778222245542, DIRECT, f08c47fec0942fa0"
+    return content, 200, {'Content-Type': 'text/plain'}
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8080))
