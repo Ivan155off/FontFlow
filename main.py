@@ -27,6 +27,7 @@ INDEX_HTML = """
         .blob1 { background: var(--p); top: -10%; left: -10%; }
         .blob2 { background: var(--s); bottom: -10%; right: -10%; animation-delay: -5s; }
         @keyframes move { from { transform: translate(0,0); } to { transform: translate(100px, 100px); } }
+        
         .container { width: 100%; max-width: 550px; text-align: center; z-index: 1; }
         h1 {
             font-family: 'Syncopate', sans-serif; font-size: 2.5rem;
@@ -35,6 +36,7 @@ INDEX_HTML = """
             margin-bottom: 8px; filter: drop-shadow(0 0 15px rgba(0,255,136,0.4));
         }
         .description { color: #aaa; font-size: 0.95rem; margin-bottom: 35px; opacity: 0.8; }
+        
         textarea {
             width: 100%; padding: 22px; border-radius: 18px; 
             background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
@@ -42,7 +44,9 @@ INDEX_HTML = """
             backdrop-filter: blur(10px);
         }
         textarea:focus { border-color: var(--p); background: rgba(255,255,255,0.06); }
+        
         .results { margin-top: 30px; display: grid; gap: 15px; width: 100%; }
+        
         .card {
             background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
             padding: 18px 22px; border-radius: 16px; display: flex; justify-content: space-between;
@@ -51,10 +55,11 @@ INDEX_HTML = """
         }
         .card:hover { transform: scale(1.02); border-color: var(--p); background: rgba(255,255,255,0.05); }
         .card span { font-size: 1.25rem; text-align: left; flex: 1; padding-right: 15px; overflow-wrap: anywhere; }
+        
         .copy-btn { 
             background: rgba(255,255,255,0.1); color: #fff; padding: 10px 18px; 
             border-radius: 12px; font-weight: 700; font-size: 0.75rem; 
-            text-transform: uppercase; transition: 0.3s; min-width: 95px;
+            text-transform: uppercase; transition: 0.3s; min-width: 95px; text-align: center;
         }
         .card:hover .copy-btn { background: var(--p); color: #000; }
         .copied .copy-btn { background: var(--s) !important; color: #fff !important; transform: scale(1.1); box-shadow: 0 0 20px var(--s); }
@@ -65,14 +70,14 @@ INDEX_HTML = """
     <div class="container">
         <h1>FONT FLOW</h1>
         <div class="description">Твой уникальный стиль для соцсетей и игр</div>
-        <textarea id="input" placeholder="Введи свой текст здесь..."></textarea>
+        <textarea id="input" placeholder="Введи текст здесь..."></textarea>
         <div id="output" class="results"></div>
     </div>
     <script>
         const FONTS = {
             "Italic": "𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻",
             "Underline": "A̲B̲C̲D̲E̲F̲G̲H̲I̲J̲K̲L̲M̲N̲O̲P̲Q̲R̲S̲T̲U̲V̲W̲X̲Y̲Z̲a̲b̲c̲d̲e̲f̲g̲h̲i̲j̲k̲l̲m̲n̲o̲p̲q̲r̲s̲t̲u̲v̲w̲x̲y̲z̲",
-            "Strike": "A̶B̶C̶D̶E̶F̶G̶H̶I̶J̶K̶L̶M̶N̶O̶P̶Q̶R̶S̶T̶U̶V̶W̶X̶Y̶Z̶a̶b̶c̶d̶e̶f̶g̶h̶i̶j̶k̶l̶m̶n̶o̶p̶q̶r̶s̶t̶u̶v̶w̶x̶y̶z̶",
+            "Strike": "A̶B̶C̶D̶E̶F̶G̶H_I̶J̶K̶L̶M̶N̶O̶P̶Q̶R̶S̶T̶U̶V̶W̶X̶Y̶Z̶a̶b̶c̶d̶e̶f̶g̶h̶i̶j̶k̶l̶m̶n̶o̶p̶q̶r̶s̶t̶u̶v̶w̶x̶y̶z̶",
             "Bubbles": "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ",
             "Wide": "ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ",
             "Small Caps": "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ",
@@ -81,28 +86,43 @@ INDEX_HTML = """
         const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         const input = document.getElementById('input');
         const output = document.getElementById('output');
-        input.oninput = () => {
+
+        input.oninput = function() {
             const val = input.value;
             output.innerHTML = "";
             if(!val) return;
-            Object.keys(FONTS).forEach(key => {
+
+            for (const key in FONTS) {
                 let res = "";
-                let t = (key === "Upside") ? val.split("").reverse().join("") : val;
-                for(let c of t) {
+                let textToProcess = (key === "Upside") ? val.split("").reverse().join("") : val;
+                
+                for(let c of textToProcess) {
                     let i = alpha.indexOf(c);
                     res += (i !== -1) ? FONTS[key][i] : c;
                 }
+
                 const div = document.createElement('div');
                 div.className = 'card';
-                div.innerHTML = `<span>\${res}</span><div class="copy-btn">COPY</div>`;
-                div.onclick = () => {
-                    navigator.clipboard.writeText(res);
+                // Используем плюсы вместо обратных кавычек для безопасности
+                div.innerHTML = "<span>" + res + "</span><div class='copy-btn'>COPY</div>";
+                
+                div.onclick = function() {
+                    const el = document.createElement('textarea');
+                    el.value = res;
+                    document.body.appendChild(el);
+                    el.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(el);
+
                     div.classList.add('copied');
                     div.querySelector('.copy-btn').innerText = "COPIED!";
-                    setTimeout(() => { div.classList.remove('copied'); div.querySelector('.copy-btn').innerText = "COPY"; }, 1200);
+                    setTimeout(function() {
+                        div.classList.remove('copied');
+                        div.querySelector('.copy-btn').innerText = "COPY";
+                    }, 1200);
                 };
                 output.appendChild(div);
-            });
+            }
         };
     </script>
 </body>
