@@ -3,7 +3,6 @@ import os
 
 app = Flask(__name__)
 
-# Основной HTML интерфейс
 INDEX_HTML = """
 <!DOCTYPE html>
 <html lang="en">
@@ -11,6 +10,9 @@ INDEX_HTML = """
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FONT FLOW | Ultimate Style</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪄</text></svg>">
+    
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2712778222245542" crossorigin="anonymous"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
@@ -41,7 +43,8 @@ INDEX_HTML = """
         }
         .description { color: #aaa; font-size: 0.9rem; margin-bottom: 25px; opacity: 0.8; }
         
-        .ad-box { width: 100%; min-height: 50px; margin: 15px 0; border-radius: 10px; background: rgba(255,255,255,0.02); overflow: hidden; }
+        /* Рекламный блок: чуть меньше отступы, чтобы не мешать */
+        .ad-box { width: 100%; min-height: 50px; margin: 10px 0; border-radius: 10px; background: rgba(255,255,255,0.01); overflow: hidden; }
 
         textarea {
             width: 100%; padding: 20px; border-radius: 15px; 
@@ -141,10 +144,8 @@ INDEX_HTML = """
 def index():
     return render_template_string(INDEX_HTML)
 
-# Тот самый маршрут для файла ads.txt
 @app.route('/ads.txt')
 def ads_txt():
-    # Твоя строка авторизации для Google
     content = "google.com, pub-2712778222245542, DIRECT, f08c47fec0942fa0"
     return content, 200, {'Content-Type': 'text/plain'}
 
