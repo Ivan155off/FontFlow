@@ -3,7 +3,6 @@ import os
 
 app = Flask(__name__)
 
-# Основной HTML интерфейс
 INDEX_HTML = """
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +11,7 @@ INDEX_HTML = """
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FONT FLOW | Ultimate Style</title>
     
-    <meta name="google-site-verification" content="google39804f269c3b52c1" />
+    <meta name="google-site-verification" content="OO6lpx6rkPkflDspe23xGNja4sRaQ3yb0Z3JoKuy5kE" />
     
     <link rel="icon" type="image/png" href="https://img.icons8.com/parakeet/48/ffff.png">
     
@@ -67,7 +66,6 @@ INDEX_HTML = """
         .card:hover { transform: translateY(-2px); border-color: var(--p); background: rgba(255,255,255,0.05); }
         .card span { font-size: 1.2rem; text-align: left; flex: 1; padding-right: 15px; overflow-wrap: anywhere; }
         
-        /* Исправленные CSS-стили */
         .card.strikethrough span { text-decoration: line-through; }
         .card.underline span { text-decoration: underline; }
         
@@ -105,7 +103,7 @@ INDEX_HTML = """
         const FONTS = {
             "Italic": "𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻",
             "Bold": "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳",
-            "Monospace": "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄傳ＷＸＹ𝚉𝚊𝚋𝚌𝚍ｅ𝚏𝚐ｈ𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣",
+            "Monospace": "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄傳ＷＸＹ𝚉𝚊𝚋𝚌𝚍ｅ𝚏𝚐ｈ𝚒𝚓𝚔𝚕𝕞𝚗𝚘𝚙𝚚𝚛𝘴𝚝𝚞𝚟𝚠𝚡𝚢𝚣",
             "Bubbles": "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ",
             "Small Caps": "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ",
             "Upside": "ɐqɔpǝɟƃɥᴉɾʞꞁɯuodbɹsʇnʌʍxʎzⱯᗷᑐᗡEᖵᘐHIᘀKꞀWNOᗡᑐᖴS⊥∩ΛM᙭⅄Z"
@@ -119,10 +117,8 @@ INDEX_HTML = """
             output.innerHTML = "";
             if(!val) return;
 
-            // 1. Unicode-шрифты
             for (const key in FONTS) {
                 let res = "";
-                // ЧТОБ НА 1000% РАБОТАЛО: Чиним перевернутый шрифт
                 let textToProcess = (key === "Upside") ? val.split("").reverse().join("") : val;
                 for(let c of textToProcess) {
                     let i = alpha.indexOf(c);
@@ -143,7 +139,6 @@ INDEX_HTML = """
                 output.appendChild(div);
             }
             
-            // 2. CSS-шрифты ( Strike и Underline)
             const CSS_FONTS = { "Strike": "strikethrough", "Underline": "underline" };
             for (const key in CSS_FONTS) {
                 const div = document.createElement('div');
