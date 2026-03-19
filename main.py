@@ -12,6 +12,8 @@ INDEX_HTML = """
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FONT FLOW | Ultimate Style</title>
     
+    <meta name="google-site-verification" content="google39804f269c3b52c1" />
+    
     <link rel="icon" type="image/png" href="https://img.icons8.com/parakeet/48/ffff.png">
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2712778222245542" crossorigin="anonymous"></script>
@@ -63,11 +65,11 @@ INDEX_HTML = """
             backdrop-filter: blur(5px);
         }
         .card:hover { transform: translateY(-2px); border-color: var(--p); background: rgba(255,255,255,0.05); }
-        
-        /* Исправленные стили для "битых" шрифтов */
         .card span { font-size: 1.2rem; text-align: left; flex: 1; padding-right: 15px; overflow-wrap: anywhere; }
-        .card.strikethrough span { text-decoration: line-through; } /* Зачеркнутый (Strike) */
-        .card.underline span { text-decoration: underline; } /* Подчеркнутый (Underline) */
+        
+        /* Исправленные CSS-стили */
+        .card.strikethrough span { text-decoration: line-through; }
+        .card.underline span { text-decoration: underline; }
         
         .copy-btn { 
             background: rgba(255,255,255,0.08); color: #fff; padding: 8px 16px; 
@@ -103,18 +105,11 @@ INDEX_HTML = """
         const FONTS = {
             "Italic": "𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻",
             "Bold": "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳",
-            "Monospace": "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍履ｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ",
+            "Monospace": "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄傳ＷＸＹ𝚉𝚊𝚋𝚌𝚍ｅ𝚏𝚐ｈ𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣",
             "Bubbles": "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ",
             "Small Caps": "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ",
             "Upside": "ɐqɔpǝɟƃɥᴉɾʞꞁɯuodbɹsʇnʌʍxʎzⱯᗷᑐᗡEᖵᘐHIᘀKꞀWNOᗡᑐᖴS⊥∩ΛM᙭⅄Z"
         };
-        
-        // CSS-стили для спецэффектов (Strikethrough и Underline)
-        const CSS_FONTS = {
-            "Strike": "strikethrough",
-            "Underline": "underline"
-        };
-        
         const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         const input = document.getElementById('input');
         const output = document.getElementById('output');
@@ -124,41 +119,48 @@ INDEX_HTML = """
             output.innerHTML = "";
             if(!val) return;
 
-            // 1. Сначала выводим обычные Unicode-шрифты
+            // 1. Unicode-шрифты
             for (const key in FONTS) {
                 let res = "";
+                // ЧТОБ НА 1000% РАБОТАЛО: Чиним перевернутый шрифт
                 let textToProcess = (key === "Upside") ? val.split("").reverse().join("") : val;
                 for(let c of textToProcess) {
                     let i = alpha.indexOf(c);
                     res += (i !== -1) ? FONTS[key][i] : c;
                 }
-                createCard(key, res, ""); // Пустой CSS класс
+                const div = document.createElement('div');
+                div.className = 'card';
+                div.innerHTML = "<span>" + res + "</span><div class='copy-btn'>COPY</div>";
+                div.onclick = function() {
+                    navigator.clipboard.writeText(res);
+                    div.classList.add('copied');
+                    div.querySelector('.copy-btn').innerText = "DONE!";
+                    setTimeout(() => {
+                        div.classList.remove('copied');
+                        div.querySelector('.copy-btn').innerText = "COPY";
+                    }, 1200);
+                };
+                output.appendChild(div);
             }
             
-            // 2. Затем выводим исправленные CSS-шрифты (Strike и Underline)
+            // 2. CSS-шрифты ( Strike и Underline)
+            const CSS_FONTS = { "Strike": "strikethrough", "Underline": "underline" };
             for (const key in CSS_FONTS) {
-                // Здесь мы не меняем символы, а используем оригинальный текст
-                createCard(key, val, CSS_FONTS[key]); // Передаем CSS класс
+                const div = document.createElement('div');
+                div.className = 'card ' + CSS_FONTS[key];
+                div.innerHTML = "<span>" + val + "</span><div class='copy-btn'>COPY</div>";
+                div.onclick = function() {
+                    navigator.clipboard.writeText(val);
+                    div.classList.add('copied');
+                    div.querySelector('.copy-btn').innerText = "DONE!";
+                    setTimeout(() => {
+                        div.classList.remove('copied');
+                        div.querySelector('.copy-btn').innerText = "COPY";
+                    }, 1200);
+                };
+                output.appendChild(div);
             }
         };
-        
-        // Общая функция для создания карточек
-        function createCard(key, text, cssClass) {
-            const div = document.createElement('div');
-            // Если есть CSS класс (например, strikethrough), добавляем его к карточке
-            div.className = 'card' + (cssClass ? ' ' + cssClass : '');
-            div.innerHTML = "<span>" + text + "</span><div class='copy-btn'>COPY</div>";
-            div.onclick = function() {
-                navigator.clipboard.writeText(text);
-                div.classList.add('copied');
-                div.querySelector('.copy-btn').innerText = "DONE!";
-                setTimeout(() => {
-                    div.classList.remove('copied');
-                    div.querySelector('.copy-btn').innerText = "COPY";
-                }, 1200);
-            };
-            output.appendChild(div);
-        }
     </script>
 </body>
 </html>
@@ -168,10 +170,8 @@ INDEX_HTML = """
 def index():
     return render_template_string(INDEX_HTML)
 
-# Тот самый маршрут для файла ads.txt
 @app.route('/ads.txt')
 def ads_txt():
-    # Твоя строка авторизации для Google
     content = "google.com, pub-2712778222245542, DIRECT, f08c47fec0942fa0"
     return content, 200, {'Content-Type': 'text/plain'}
 
