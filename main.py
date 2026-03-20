@@ -31,7 +31,7 @@ INDEX_HTML = """
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>Font Flow — Stylish Text Generator & Aesthetic Fonts</title>
-    <meta name="description" content="Create unique nicknames and stylish text for Discord, Telegram, and Social Media. Copy and paste 500+ aesthetic fonts, fancy letters, and cool symbols.">
+    <meta name="description" content="Create unique nicknames and stylish text for Discord, Telegram, and Social Media. Copy and paste a lot of aesthetic fonts, fancy letters, and cool symbols.">
     <meta name="keywords" content="font generator, stylish text, aesthetic fonts, nickname maker, fancy letters, copy and paste fonts">
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P4Q7YLZLBC"></script>
