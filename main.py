@@ -1,7 +1,21 @@
-from flask import Flask, render_template_string
+from flask import Flask, render_template_string, request
 import os
+import json # Добавили импорт
 
 app = Flask(__name__)
+
+# --- ЛОГИКА ДЛЯ НОВЫХ ШРИФТОВ ---
+def get_dynamic_fonts(text):
+    try:
+        with open('fonts.json', 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        results = []
+        for name, mapping in data.items():
+            new_text = "".join([mapping.get(c.lower(), c) for c in text])
+            results.append({'name': name, 'text': new_text})
+        return results
+    except:
+        return []
 
 INDEX_HTML = """
 <!DOCTYPE html>
@@ -104,7 +118,16 @@ INDEX_HTML = """
             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
 
-        <div id="output" class="results"></div>
+        <div id="output" class="results">
+            {% if extra_fonts %}
+                {% for font in extra_fonts %}
+                <div class="card" onclick="copyDynamic(this, '{{ font.text }}')">
+                    <span>{{ font.text }}</span>
+                    <div class='copy-btn'>COPY</div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
     </div>
 
     <script>
@@ -120,11 +143,25 @@ INDEX_HTML = """
         const input = document.getElementById('input');
         const output = document.getElementById('output');
 
+        // Функция копирования для новых шрифтов
+        function copyDynamic(el, text) {
+            navigator.clipboard.writeText(text);
+            el.classList.add('copied');
+            el.querySelector('.copy-btn').innerText = "DONE!";
+            setTimeout(() => {
+                el.classList.remove('copied');
+                el.querySelector('.copy-btn').innerText = "COPY";
+            }, 1200);
+        }
+
         input.oninput = function() {
             const val = input.value;
-            output.innerHTML = "";
-            if(!val) return;
+            // Чтобы новые шрифты не пропадали, мы очищаем только старые, но это сложно в JS.
+            // Поэтому мы просто добавим логику: если поле пустое - скрываем всё.
+            if(!val) { output.innerHTML = ""; return; }
 
+            // Перерисовываем старые шрифты
+            let oldContent = "";
             for (const key in FONTS) {
                 let res = "";
                 let textToProcess = (key === "Upside") ? val.split("").reverse().join("") : val;
@@ -132,46 +169,26 @@ INDEX_HTML = """
                     let i = alpha.indexOf(c);
                     res += (i !== -1) ? FONTS[key][i] : c;
                 }
-                const div = document.createElement('div');
-                div.className = 'card';
-                div.innerHTML = "<span>" + res + "</span><div class='copy-btn'>COPY</div>";
-                div.onclick = function() {
-                    navigator.clipboard.writeText(res);
-                    div.classList.add('copied');
-                    div.querySelector('.copy-btn').innerText = "DONE!";
-                    setTimeout(() => {
-                        div.classList.remove('copied');
-                        div.querySelector('.copy-btn').innerText = "COPY";
-                    }, 1200);
-                };
-                output.appendChild(div);
+                oldContent += `<div class='card' onclick="copyDynamic(this, '${res}')"><span>${res}</span><div class='copy-btn'>COPY</div></div>`;
             }
-            
+
             const CSS_FONTS = { "Strike": "strikethrough", "Underline": "underline" };
             for (const key in CSS_FONTS) {
-                const div = document.createElement('div');
-                div.className = 'card ' + CSS_FONTS[key];
-                div.innerHTML = "<span>" + val + "</span><div class='copy-btn'>COPY</div>";
-                div.onclick = function() {
-                    navigator.clipboard.writeText(val);
-                    div.classList.add('copied');
-                    div.querySelector('.copy-btn').innerText = "DONE!";
-                    setTimeout(() => {
-                        div.classList.remove('copied');
-                        div.querySelector('.copy-btn').innerText = "COPY";
-                    }, 1200);
-                };
-                output.appendChild(div);
+                oldContent += `<div class='card ${CSS_FONTS[key]}' onclick="copyDynamic(this, '${val}')"><span>${val}</span><div class='copy-btn'>COPY</div></div>`;
             }
+            
+            output.innerHTML = oldContent;
         };
     </script>
 </body>
 </html>
 """
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template_string(INDEX_HTML)
+    user_text = request.args.get('text', '') # Можно передавать текст через URL для тестов
+    extra_fonts = get_dynamic_fonts(user_text) if user_text else []
+    return render_template_string(INDEX_HTML, extra_fonts=extra_fonts)
 
 @app.route('/ads.txt')
 def ads_txt():
