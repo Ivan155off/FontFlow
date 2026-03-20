@@ -20,7 +20,7 @@ def get_dynamic_fonts(text):
             results.append({'name': name, 'text': new_text})
         return results
     except Exception as e:
-        print(f"Ошибка загрузки шрифтов: {e}") # Это появится в логах Render, если что-то пойдет не так
+        print(f"Font error: {e}") # Это появится в логах Render, если что-то пойдет не так
         return []
 
 INDEX_HTML = """
