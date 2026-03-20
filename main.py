@@ -29,7 +29,10 @@ INDEX_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FONT FLOW | Ultimate Style</title>
+    
+    <title>Font Flow — Stylish Text Generator & Aesthetic Fonts</title>
+    <meta name="description" content="Create unique nicknames and stylish text for Discord, Telegram, and Social Media. Copy and paste 500+ aesthetic fonts, fancy letters, and cool symbols.">
+    <meta name="keywords" content="font generator, stylish text, aesthetic fonts, nickname maker, fancy letters, copy and paste fonts">
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P4Q7YLZLBC"></script>
     <script>
@@ -162,8 +165,6 @@ INDEX_HTML = """
 
         input.oninput = function() {
             const val = input.value;
-            // Чтобы новые шрифты не пропадали, мы очищаем только старые, но это сложно в JS.
-            // Поэтому мы просто добавим логику: если поле пустое - скрываем всё.
             if(!val) { output.innerHTML = ""; return; }
 
             // Перерисовываем старые шрифты
