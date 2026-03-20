@@ -7,14 +7,20 @@ app = Flask(__name__)
 # --- ЛОГИКА ДЛЯ НОВЫХ ШРИФТОВ ---
 def get_dynamic_fonts(text):
     try:
-        with open('fonts.json', 'r', encoding='utf-8') as f:
+        # Указываем точный путь к файлу в системе
+        base_path = os.path.dirname(__file__)
+        json_path = os.path.join(base_path, 'fonts.json')
+        
+        with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
+        
         results = []
         for name, mapping in data.items():
-            new_text = "".join([mapping.get(c.lower(), c) for c in text])
+            new_text = "".join([mapping.get(char.lower(), char) for char in text])
             results.append({'name': name, 'text': new_text})
         return results
-    except:
+    except Exception as e:
+        print(f"Ошибка загрузки шрифтов: {e}") # Это появится в логах Render, если что-то пойдет не так
         return []
 
 INDEX_HTML = """
