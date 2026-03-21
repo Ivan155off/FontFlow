@@ -31,7 +31,6 @@ INDEX_HTML = """
     
     <title>Font Flow — Stylish Text Generator & Aesthetic Fonts</title>
     <meta name="description" content="Create unique nicknames and stylish text for Discord, Telegram, and Social Media. Copy and paste aesthetic fonts, fancy letters, and cool symbols.">
-    <meta name="keywords" content="font generator, stylish text, aesthetic fonts, nickname maker, fancy letters, copy and paste fonts">
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P4Q7YLZLBC"></script>
     <script>
@@ -95,9 +94,6 @@ INDEX_HTML = """
         .card:active { transform: scale(0.98); }
         .card span { font-size: 1.2rem; text-align: left; flex: 1; padding-right: 15px; overflow-wrap: anywhere; }
         
-        .card.strikethrough span { text-decoration: line-through; }
-        .card.underline span { text-decoration: underline; }
-        
         .copy-btn { 
             background: rgba(255,255,255,0.08); color: #fff; padding: 8px 16px; 
             border-radius: 10px; font-weight: 700; font-size: 0.7rem; 
@@ -106,13 +102,16 @@ INDEX_HTML = """
         .card:hover .copy-btn { background: var(--p); color: #000; }
         .copied .copy-btn { background: var(--s) !important; color: #fff !important; }
 
-        /* SEO Content Section */
         .seo-content { margin-top: 40px; text-align: left; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
         .seo-content h2 { color: var(--p); font-size: 1.1rem; margin-top: 15px; }
         .seo-content p { color: #888; font-size: 0.85rem; line-height: 1.5; }
         
-        footer { margin-top: 40px; padding-bottom: 20px; font-size: 0.8rem; opacity: 0.4; }
-        footer a { color: #fff; text-decoration: underline; display: inline-block; transition: transform 0.2s; }
+        footer { margin-top: 40px; padding-bottom: 20px; font-size: 0.8rem; opacity: 0.6; }
+        footer a { 
+            color: #aaa; text-decoration: none; display: inline-block; transition: all 0.3s ease; 
+            border-bottom: 1px solid transparent;
+        }
+        footer a:hover { color: var(--p); border-bottom-color: var(--p); transform: translateY(-1px); }
         footer a:active { transform: scale(0.9); }
     </style>
 </head>
@@ -162,7 +161,7 @@ INDEX_HTML = """
             "Italic": "𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻",
             "Bold": "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳",
             "Monospace": "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄傳ＷＸＹ𝚉𝚊𝚋𝚌𝚍ｅ𝚏𝚐ｈ𝚒𝚓𝚔𝚕𝕞𝚗𝚘𝚙𝚚𝚛𝘴𝚝𝚞𝚟𝚠𝚡𝚢𝚣",
-            "Bubbles": "ⒶⒷⒸⒹⒺⒻ⓼ⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ",
+            "Bubbles": "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ",
             "Small Caps": "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ",
             "Upside": "ɐqɔpǝɟƃɥᴉɾʞꞁɯuodbɹsʇnʌʍxʎzⱯᗷᑐᗡEᖵᘐHIᘀKꞀWNOᗡᑐᖴS⊥∩ΛM᙭⅄Z"
         };
@@ -211,25 +210,43 @@ PRIVACY_HTML = """
     <meta charset="UTF-8">
     <title>Privacy Policy - Font Flow</title>
     <style>
-        body { background: #080808; color: #888; font-family: sans-serif; padding: 40px; line-height: 1.6; max-width: 700px; margin: 0 auto; }
-        h1 { color: #00ff88; }
-        h2 { color: #fff; margin-top: 30px; }
+        body { background: #080808; color: #ccc; font-family: sans-serif; padding: 40px; line-height: 1.6; max-width: 800px; margin: 0 auto; }
+        h1 { color: #00ff88; font-family: sans-serif; }
+        h2 { color: #fff; margin-top: 30px; border-left: 4px solid #bd00ff; padding-left: 15px; }
+        p { margin-bottom: 20px; color: #aaa; }
         .back-link { 
-            display: inline-block; margin-top: 30px; color: #bd00ff; text-decoration: none; 
-            font-weight: bold; transition: transform 0.2s;
+            display: inline-block; margin-top: 40px; color: #00ff88; text-decoration: none; 
+            font-weight: bold; transition: all 0.3s ease; padding: 10px 20px; border: 1px solid #00ff88; border-radius: 8px;
         }
-        .back-link:active { transform: scale(0.9); }
+        .back-link:hover { background: #00ff88; color: #000; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,255,136,0.3); }
+        .back-link:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
-    <h1>Privacy Policy</h1>
-    <p>At Font Flow, accessible from our website, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Font Flow and how we use it.</p>
-    <h2>Consent</h2>
+    <h1>Privacy Policy for Font Flow</h1>
+    <p>Last updated: March 2026</p>
+    
+    <p>At Font Flow, accessible from your website, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Font Flow and how we use it.</p>
+
+    <h2>1. Consent</h2>
     <p>By using our website, you hereby consent to our Privacy Policy and agree to its terms.</p>
-    <h2>Information we collect</h2>
-    <p>Font Flow does not store or collect any text you type in our generator. All transformations happen locally or via temporary session processing.</p>
-    <h2>Google DoubleClick DART Cookie</h2>
-    <p>Google is one of a third-party vendor on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors.</p>
+
+    <h2>2. Information We Collect</h2>
+    <p>Font Flow does not collect or store any personal information. The text you enter into our generator is processed locally in your browser or temporarily during the conversion process and is not saved on our servers.</p>
+
+    <h2>3. Log Files</h2>
+    <p>Font Flow follows a standard procedure of using log files. These files log visitors when they visit websites. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, and referring/exit pages. These are not linked to any information that is personally identifiable.</p>
+
+    <h2>4. Advertising Partners & Cookies</h2>
+    <p>We use Google AdSense to serve ads. Google, as a third-party vendor, uses cookies to serve ads on our site. Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to Font Flow or other sites on the Internet.</p>
+    <p>Users may choose to decline the use of personalized advertising by visiting Google's Ad Settings.</p>
+
+    <h2>5. Google Analytics</h2>
+    <p>We use Google Analytics to monitor and analyze web traffic. This helps us improve our service by understanding how users interact with Font Flow. Google Analytics collects data through cookies, but this data is aggregated and anonymous.</p>
+
+    <h2>6. Children's Information</h2>
+    <p>Another part of our priority is adding protection for children while using the internet. Font Flow does not knowingly collect any Personal Identifiable Information from children under the age of 13.</p>
+
     <a href="/" class="back-link">← Back to Home</a>
 </body>
 </html>
