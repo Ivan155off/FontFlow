@@ -1,13 +1,12 @@
 from flask import Flask, render_template_string, request
 import os
-import json # Добавили импорт
+import json
 
 app = Flask(__name__)
 
 # --- ЛОГИКА ДЛЯ НОВЫХ ШРИФТОВ ---
 def get_dynamic_fonts(text):
     try:
-        # Указываем точный путь к файлу в системе
         base_path = os.path.dirname(__file__)
         json_path = os.path.join(base_path, 'fonts.json')
         
@@ -20,7 +19,7 @@ def get_dynamic_fonts(text):
             results.append({'name': name, 'text': new_text})
         return results
     except Exception as e:
-        print(f"Font error: {e}") # Это появится в логах Render, если что-то пойдет не так
+        print(f"Font error: {e}")
         return []
 
 INDEX_HTML = """
@@ -43,9 +42,7 @@ INDEX_HTML = """
     </script>
     
     <meta name="google-site-verification" content="OO6lpx6rkPkflDspe23xGNja4sRaQ3yb0Z3JoKuy5kE" />
-    
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
-    
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2712778222245542" crossorigin="anonymous"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
@@ -107,6 +104,14 @@ INDEX_HTML = """
         }
         .card:hover .copy-btn { background: var(--p); color: #000; }
         .copied .copy-btn { background: var(--s) !important; color: #fff !important; }
+
+        /* SEO Content Section */
+        .seo-content { margin-top: 40px; text-align: left; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .seo-content h2 { color: var(--p); font-size: 1.1rem; margin-top: 15px; }
+        .seo-content p { color: #888; font-size: 0.85rem; line-height: 1.5; }
+        
+        footer { margin-top: 40px; padding-bottom: 20px; font-size: 0.8rem; opacity: 0.4; }
+        footer a { color: #fff; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -137,6 +142,17 @@ INDEX_HTML = """
                 {% endfor %}
             {% endif %}
         </div>
+
+        <div class="seo-content">
+            <h2>What is Font Flow?</h2>
+            <p>Font Flow is a powerful online aesthetic text generator. We provide a wide range of fancy letters and cool symbols that you can copy and paste into your Discord, Telegram, or Instagram profiles. Our tool uses Unicode characters to ensure your stylish nicknames work across all modern platforms.</p>
+            <h2>How to generate fancy fonts?</h2>
+            <p>Simply type your text in the box above. Our algorithm will instantly create over 500+ font combinations, including italic, bold, monospace, and many aesthetic styles. Click "Copy" to use the result anywhere instantly!</p>
+        </div>
+
+        <footer>
+            © 2026 Font Flow | <a href="/privacy">Privacy Policy</a>
+        </footer>
     </div>
 
     <script>
@@ -152,7 +168,6 @@ INDEX_HTML = """
         const input = document.getElementById('input');
         const output = document.getElementById('output');
 
-        // Функция копирования для новых шрифтов
         function copyDynamic(el, text) {
             navigator.clipboard.writeText(text);
             el.classList.add('copied');
@@ -166,8 +181,6 @@ INDEX_HTML = """
         input.oninput = function() {
             const val = input.value;
             if(!val) { output.innerHTML = ""; return; }
-
-            // Перерисовываем старые шрифты
             let oldContent = "";
             for (const key in FONTS) {
                 let res = "";
@@ -178,12 +191,10 @@ INDEX_HTML = """
                 }
                 oldContent += `<div class='card' onclick="copyDynamic(this, '${res}')"><span>${res}</span><div class='copy-btn'>COPY</div></div>`;
             }
-
             const CSS_FONTS = { "Strike": "strikethrough", "Underline": "underline" };
             for (const key in CSS_FONTS) {
                 oldContent += `<div class='card ${CSS_FONTS[key]}' onclick="copyDynamic(this, '${val}')"><span>${val}</span><div class='copy-btn'>COPY</div></div>`;
             }
-            
             output.innerHTML = oldContent;
         };
     </script>
@@ -191,11 +202,42 @@ INDEX_HTML = """
 </html>
 """
 
+PRIVACY_HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Privacy Policy - Font Flow</title>
+    <style>
+        body { background: #080808; color: #888; font-family: sans-serif; padding: 40px; line-height: 1.6; max-width: 700px; margin: 0 auto; }
+        h1 { color: #00ff88; }
+        h2 { color: #fff; margin-top: 30px; }
+        a { color: #bd00ff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Privacy Policy</h1>
+    <p>At Font Flow, accessible from your website, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Font Flow and how we use it.</p>
+    <h2>Consent</h2>
+    <p>By using our website, you hereby consent to our Privacy Policy and agree to its terms.</p>
+    <h2>Information we collect</h2>
+    <p>Font Flow does not store or collect any text you type in our generator. All transformations happen locally or via temporary session processing.</p>
+    <h2>Google DoubleClick DART Cookie</h2>
+    <p>Google is one of a third-party vendor on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors.</p>
+    <p><a href="/">← Back to Home</a></p>
+</body>
+</html>
+"""
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    user_text = request.args.get('text', '') # Можно передавать текст через URL для тестов
+    user_text = request.args.get('text', '')
     extra_fonts = get_dynamic_fonts(user_text) if user_text else []
     return render_template_string(INDEX_HTML, extra_fonts=extra_fonts)
+
+@app.route('/privacy')
+def privacy():
+    return render_template_string(PRIVACY_HTML)
 
 @app.route('/ads.txt')
 def ads_txt():
