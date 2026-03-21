@@ -92,6 +92,7 @@ INDEX_HTML = """
             backdrop-filter: blur(5px);
         }
         .card:hover { transform: translateY(-2px); border-color: var(--p); background: rgba(255,255,255,0.05); }
+        .card:active { transform: scale(0.98); }
         .card span { font-size: 1.2rem; text-align: left; flex: 1; padding-right: 15px; overflow-wrap: anywhere; }
         
         .card.strikethrough span { text-decoration: line-through; }
@@ -111,7 +112,8 @@ INDEX_HTML = """
         .seo-content p { color: #888; font-size: 0.85rem; line-height: 1.5; }
         
         footer { margin-top: 40px; padding-bottom: 20px; font-size: 0.8rem; opacity: 0.4; }
-        footer a { color: #fff; text-decoration: underline; }
+        footer a { color: #fff; text-decoration: underline; display: inline-block; transition: transform 0.2s; }
+        footer a:active { transform: scale(0.9); }
     </style>
 </head>
 <body>
@@ -147,7 +149,7 @@ INDEX_HTML = """
             <h2>What is Font Flow?</h2>
             <p>Font Flow is a powerful online aesthetic text generator. We provide a wide range of fancy letters and cool symbols that you can copy and paste into your Discord, Telegram, or Instagram profiles. Our tool uses Unicode characters to ensure your stylish nicknames work across all modern platforms.</p>
             <h2>How to generate fancy fonts?</h2>
-            <p>Simply type your text in the box above. Our algorithm will instantly create over 500+ font combinations, including italic, bold, monospace, and many aesthetic styles. Click "Copy" to use the result anywhere instantly!</p>
+            <p>Simply type your text in the box above. Our algorithm will instantly create font combinations, including italic, bold, monospace, and many aesthetic styles. Click "Copy" to use the result anywhere instantly!</p>
         </div>
 
         <footer>
@@ -160,7 +162,7 @@ INDEX_HTML = """
             "Italic": "𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻",
             "Bold": "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳",
             "Monospace": "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄傳ＷＸＹ𝚉𝚊𝚋𝚌𝚍ｅ𝚏𝚐ｈ𝚒𝚓𝚔𝚕𝕞𝚗𝚘𝚙𝚚𝚛𝘴𝚝𝚞𝚟𝚠𝚡𝚢𝚣",
-            "Bubbles": "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ",
+            "Bubbles": "ⒶⒷⒸⒹⒺⒻ⓼ⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ",
             "Small Caps": "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ",
             "Upside": "ɐqɔpǝɟƃɥᴉɾʞꞁɯuodbɹsʇnʌʍxʎzⱯᗷᑐᗡEᖵᘐHIᘀKꞀWNOᗡᑐᖴS⊥∩ΛM᙭⅄Z"
         };
@@ -212,19 +214,23 @@ PRIVACY_HTML = """
         body { background: #080808; color: #888; font-family: sans-serif; padding: 40px; line-height: 1.6; max-width: 700px; margin: 0 auto; }
         h1 { color: #00ff88; }
         h2 { color: #fff; margin-top: 30px; }
-        a { color: #bd00ff; text-decoration: none; }
+        .back-link { 
+            display: inline-block; margin-top: 30px; color: #bd00ff; text-decoration: none; 
+            font-weight: bold; transition: transform 0.2s;
+        }
+        .back-link:active { transform: scale(0.9); }
     </style>
 </head>
 <body>
     <h1>Privacy Policy</h1>
-    <p>At Font Flow, accessible from your website, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Font Flow and how we use it.</p>
+    <p>At Font Flow, accessible from our website, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Font Flow and how we use it.</p>
     <h2>Consent</h2>
     <p>By using our website, you hereby consent to our Privacy Policy and agree to its terms.</p>
     <h2>Information we collect</h2>
     <p>Font Flow does not store or collect any text you type in our generator. All transformations happen locally or via temporary session processing.</p>
     <h2>Google DoubleClick DART Cookie</h2>
     <p>Google is one of a third-party vendor on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors.</p>
-    <p><a href="/">← Back to Home</a></p>
+    <a href="/" class="back-link">← Back to Home</a>
 </body>
 </html>
 """
