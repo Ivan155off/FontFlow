@@ -2,12 +2,12 @@ from flask import Flask, render_template_string, request
 import os
 import json
 
-app = Flask(name)
+app = Flask(__name__)
 
 # --- ЛОГИКА ДЛЯ НОВЫХ ШРИФТОВ ---
 def get_dynamic_fonts(text):
     try:
-        base_path = os.path.dirname(file)
+        base_path = os.path.dirname(__file__)
         json_path = os.path.join(base_path, 'fonts.json')
         
         with open(json_path, 'r', encoding='utf-8') as f:
@@ -37,7 +37,7 @@ INDEX_HTML = """
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P4Q7YLZLBC"></script>
     <script>
-      window.dataLayer = window.dataLayer  [];
+      window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-P4Q7YLZLBC');
@@ -132,7 +132,7 @@ INDEX_HTML = """
                  data-ad-slot="auto"
                  data-ad-format="auto"
                  data-full-width-responsive="true"></ins>
-            <script>(adsbygoogle = window.adsbygoogle  []).push({});</script>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
 
         <div id="output" class="results">
@@ -191,11 +191,11 @@ INDEX_HTML = """
                     let i = alpha.indexOf(c);
                     res += (i !== -1) ? FONTS[key][i] : c;
                 }
-                oldContent += <div class='card' onclick="copyDynamic(this, '${res}')"><span>${res}</span><div class='copy-btn'>COPY</div></div>;
+                oldContent += `<div class='card' onclick="copyDynamic(this, '${res}')"><span>${res}</span><div class='copy-btn'>COPY</div></div>`;
             }
             const CSS_FONTS = { "Strike": "strikethrough", "Underline": "underline" };
             for (const key in CSS_FONTS) {
-                oldContent += <div class='card ${CSS_FONTS[key]}' onclick="copyDynamic(this, '${val}')"><span>${val}</span><div class='copy-btn'>COPY</div></div>;
+                oldContent += `<div class='card ${CSS_FONTS[key]}' onclick="copyDynamic(this, '${val}')"><span>${val}</span><div class='copy-btn'>COPY</div></div>`;
             }
             output.innerHTML = oldContent;
         };
@@ -279,6 +279,7 @@ PRIVACY_HTML = """
 </body>
 </html>
 """
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     user_text = request.args.get('text', '')
@@ -294,6 +295,6 @@ def ads_txt():
     content = "google.com, pub-2712778222245542, DIRECT, f08c47fec0942fa0"
     return content, 200, {'Content-Type': 'text/plain'}
 
-if name == 'main':
+if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8080))
     app.run(host='0.0.0.0', port=port)
