@@ -116,32 +116,10 @@ INDEX_HTML = """
         }
         footer a:hover { color: var(--p); border-bottom-color: var(--p); transform: translateY(-1px); }
         footer a:active { transform: scale(0.9); }
-
-        /* --- ВСПЛЫВАЮЩЕЕ ОКНО (POPUP) --- */
-        #privacy-popup {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 400px; background: rgba(15, 15, 15, 0.95);
-            border: 1px solid var(--p); border-radius: 15px; padding: 20px;
-            z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px); display: none; text-align: center;
-        }
-        #privacy-popup p { font-size: 0.85rem; color: #ccc; margin-bottom: 15px; line-height: 1.4; }
-        #privacy-popup a { color: var(--p); text-decoration: none; font-weight: bold; }
-        #privacy-popup button {
-            background: var(--p); color: #000; border: none; padding: 10px 25px;
-            border-radius: 8px; font-weight: 900; cursor: pointer; transition: 0.3s;
-        }
-        #privacy-popup button:hover { background: #fff; transform: scale(1.05); }
     </style>
 </head>
 <body>
     <div class="bg-blobs"><div class="blob blob1"></div><div class="blob blob2"></div></div>
-    
-    <div id="privacy-popup">
-        <p>By using Font Flow, you agree to our <a href="/privacy">Privacy Policy</a>. We use cookies to ensure you get the best experience on our website.</p>
-        <button onclick="acceptPrivacy()">OK, GOT IT!</button>
-    </div>
-
     <div class="container">
         <h1>FONT FLOW</h1>
         <div class="description">Elevate your style for social media and games</div>
@@ -182,15 +160,6 @@ INDEX_HTML = """
     </div>
 
     <script>
-        // ЛОГИКА ОКНА (ПОКАЗЫВАЕМ ТОЛЬКО ПЕРВЫЙ РАЗ)
-        if (!localStorage.getItem('privacyAccepted')) {
-            document.getElementById('privacy-popup').style.display = 'block';
-        }
-        function acceptPrivacy() {
-            localStorage.setItem('privacyAccepted', 'true');
-            document.getElementById('privacy-popup').style.display = 'none';
-        }
-
         const FONTS = {
             "Italic": "𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻",
             "Bold": "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳",
@@ -246,52 +215,70 @@ PRIVACY_HTML = """
     <title>Privacy Policy - Font Flow</title>
     """ + FAVICON + """
     <style>
-        body { background: #080808; color: #ccc; font-family: sans-serif; padding: 40px; line-height: 1.6; max-width: 800px; margin: 0 auto; }
-        h1 { color: #00ff88; font-family: sans-serif; }
-        h2 { color: #fff; margin-top: 30px; border-left: 4px solid #bd00ff; padding-left: 15px; }
-        p { margin-bottom: 20px; color: #aaa; }
-        ul { color: #aaa; margin-bottom: 20px; }
-        li { margin-bottom: 10px; }
+        body { background: #080808; color: #ccc; font-family: 'Inter', sans-serif; padding: 40px; line-height: 1.6; max-width: 850px; margin: 0 auto; }
+        h1 { color: #00ff88; font-family: sans-serif; font-size: 2.2rem; }
+        h2 { color: #fff; margin-top: 35px; border-left: 4px solid #bd00ff; padding-left: 15px; font-size: 1.3rem; }
+        p { margin-bottom: 15px; color: #aaa; font-size: 0.95rem; }
+        ul { color: #aaa; margin-bottom: 25px; padding-left: 20px; }
+        li { margin-bottom: 12px; font-size: 0.9rem; }
+        strong { color: #fff; }
         .back-link { 
-            display: inline-block; margin-top: 40px; color: #00ff88; text-decoration: none; 
-            font-weight: bold; transition: all 0.3s ease; padding: 10px 20px; border: 1px solid #00ff88; border-radius: 8px;
+            display: inline-block; margin-top: 50px; color: #00ff88; text-decoration: none; 
+            font-weight: bold; transition: all 0.3s ease; padding: 12px 25px; border: 1px solid #00ff88; border-radius: 10px;
         }
-        .back-link:hover { background: #00ff88; color: #000; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,255,136,0.3); }
+        .back-link:hover { background: #00ff88; color: #000; transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,255,136,0.2); }
     </style>
 </head>
 <body>
     <h1>Privacy Policy for Font Flow</h1>
-    <p>Last updated: March 21, 2026</p>
+    <p>Last updated: March 22, 2026</p>
     
-    <p>Your privacy is critically important to us. This Privacy Policy document outlines the types of personal information that is received and collected by Font Flow and how it is used.</p>
+    <p>At Font Flow, accessible from our website, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Font Flow and how we use it.</p>
 
-    <h2>1. General Information</h2>
-    <p>Font Flow is a free online tool for generating stylish text. We do not require registration, accounts, or any personal details (such as names, emails, or phone numbers) to use our service.</p>
-
-    <h2>2. Log Files</h2>
-    <p>Like many other websites, Font Flow makes use of log files. The information inside the log files includes internet protocol (IP) addresses, type of browser, Internet Service Provider (ISP), date/time stamp, referring/exit pages, and number of clicks. This information is used to analyze trends, administer the site, and track user’s movement around the site. IP addresses and other such information are not linked to any information that is personally identifiable.</p>
-
-    <h2>3. Cookies and Web Beacons</h2>
-    <p>Font Flow uses cookies to store information about visitors' preferences, to record user-specific information on which pages the site visitor accesses or visits, and to personalize or customize our web page content based upon visitors' browser type or other information that the visitor sends via their browser.</p>
-
-    <h2>4. Advertising Partners (Google AdSense)</h2>
-    <p>Google, as a third-party vendor, uses cookies to serve ads on Font Flow. Google's use of the DART cookie enables it to serve ads to our users based on their visit to our site and other sites on the Internet. Users may opt out of the use of the DART cookie by visiting the Google ad and content network privacy policy.</p>
-
-    <h2>5. Google Analytics</h2>
-    <p>We use Google Analytics to understand how the site is used and to improve user experience. All data is aggregated and completely anonymous.</p>
-
-    <h2>6. Children's Privacy Protection (COPPA Compliance)</h2>
-    <p>Protecting the privacy of the very young is especially important. For that reason, Font Flow never collects or maintains information at our website from those we actually know are under 13, and no part of our website is structured to attract anyone under 13.</p>
+    <h2>1. General Data Handling</h2>
+    <p>We believe in a "privacy-first" approach. Font Flow is designed as a client-side utility, meaning:</p>
     <ul>
-        <li><strong>No Personal Data Collection:</strong> We do not ask for, collect, or store any personal identification from any user, including children.</li>
-        <li><strong>No Account Creation:</strong> There are no profiles or accounts, which prevents children from sharing personal details.</li>
-        <li><strong>Parental Control:</strong> If a parent or guardian believes that Font Flow has in its database the personal information of a child under the age of 13, please contact us immediately, and we will use our best efforts to promptly remove such information from our records.</li>
+        <li><strong>No User Registration:</strong> You do not need an account to use any feature of this website.</li>
+        <li><strong>No Identity Association:</strong> We never ask for names, physical addresses, or government IDs.</li>
+        <li><strong>No Text Storage:</strong> The text you type into our generator is processed locally in your browser and is not stored on our servers.</li>
     </ul>
 
-    <h2>7. Policy Updates</h2>
-    <p>We reserve the right to update this policy at any time. We encourage visitors to frequently check this page for any changes.</p>
+    <h2>2. Log Files and Analytical Data</h2>
+    <p>Font Flow follows a standard procedure of using log files. These files log visitors when they visit websites. All hosting companies do this as part of hosting services' analytics. The information collected by log files includes:</p>
+    <ul>
+        <li>Internet protocol (IP) addresses and Browser type.</li>
+        <li>Internet Service Provider (ISP).</li>
+        <li>Date and time stamp of the session.</li>
+        <li>Referring/exit pages and possibly the number of clicks.</li>
+    </ul>
+    <p>These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users' movement on the website, and gathering demographic information.</p>
 
-    <a href="/" class="back-link">← Back to Home</a>
+    <h2>3. Cookies and Web Beacons</h2>
+    <p>Like any other website, Font Flow uses 'cookies'. These cookies are used to store information including visitors' preferences, and the pages on the website that the visitor accessed or visited. The information is used to optimize the users' experience by customizing our web page content based on visitors' browser type and/or other information.</p>
+
+    <h2>4. Third-Party Advertising (Google AdSense)</h2>
+    <p>Third-party ad servers or ad networks use technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on Font Flow, which are sent directly to users' browsers. They automatically receive your IP address when this occurs.</p>
+    <ul>
+        <li><strong>Ad Personalization:</strong> These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on websites that you visit.</li>
+        <li><strong>Control:</strong> Note that Font Flow has no access to or control over these cookies that are used by third-party advertisers.</li>
+    </ul>
+
+    <h2>5. Google Analytics</h2>
+    <p>We use Google Analytics to monitor traffic and user behavior. This helps us understand which font styles are most popular and how we can improve the user interface. All data processed by Google Analytics is aggregated and anonymous.</p>
+
+    <h2>6. Privacy Rights & Children's Information</h2>
+    <p>Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity.</p>
+    <ul>
+        <li><strong>COPPA Compliance:</strong> Font Flow does not knowingly collect any Personal Identifiable Information from children under the age of 13.</li>
+        <li><strong>GDPR Rights:</strong> We ensure that users have the right to data portability and the right to be forgotten (though we store no personal data to begin with).</li>
+        <li><strong>Data Erasure:</strong> Since we do not maintain a database of users, there is no personal data to erase upon request.</li>
+        <li><strong>Proactive Protection:</strong> If you think that your child provided this kind of information on our website, we strongly encourage you to contact us immediately and we will do our best efforts to promptly remove such information from our records.</li>
+    </ul>
+
+    <h2>7. Consent</h2>
+    <p>By using our website, you hereby consent to our Privacy Policy and agree to its Terms and Conditions.</p>
+
+    <a href="/" class="back-link">← Back to Font Flow</a>
 </body>
 </html>
 """
