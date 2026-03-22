@@ -116,10 +116,32 @@ INDEX_HTML = """
         }
         footer a:hover { color: var(--p); border-bottom-color: var(--p); transform: translateY(-1px); }
         footer a:active { transform: scale(0.9); }
+
+        /* --- ВСПЛЫВАЮЩЕЕ ОКНО (POPUP) --- */
+        #privacy-popup {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; background: rgba(15, 15, 15, 0.95);
+            border: 1px solid var(--p); border-radius: 15px; padding: 20px;
+            z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px); display: none; text-align: center;
+        }
+        #privacy-popup p { font-size: 0.85rem; color: #ccc; margin-bottom: 15px; line-height: 1.4; }
+        #privacy-popup a { color: var(--p); text-decoration: none; font-weight: bold; }
+        #privacy-popup button {
+            background: var(--p); color: #000; border: none; padding: 10px 25px;
+            border-radius: 8px; font-weight: 900; cursor: pointer; transition: 0.3s;
+        }
+        #privacy-popup button:hover { background: #fff; transform: scale(1.05); }
     </style>
 </head>
 <body>
     <div class="bg-blobs"><div class="blob blob1"></div><div class="blob blob2"></div></div>
+    
+    <div id="privacy-popup">
+        <p>By using Font Flow, you agree to our <a href="/privacy">Privacy Policy</a>. We use cookies to ensure you get the best experience on our website.</p>
+        <button onclick="acceptPrivacy()">OK, GOT IT!</button>
+    </div>
+
     <div class="container">
         <h1>FONT FLOW</h1>
         <div class="description">Elevate your style for social media and games</div>
@@ -160,6 +182,15 @@ INDEX_HTML = """
     </div>
 
     <script>
+        // ЛОГИКА ОКНА (ПОКАЗЫВАЕМ ТОЛЬКО ПЕРВЫЙ РАЗ)
+        if (!localStorage.getItem('privacyAccepted')) {
+            document.getElementById('privacy-popup').style.display = 'block';
+        }
+        function acceptPrivacy() {
+            localStorage.setItem('privacyAccepted', 'true');
+            document.getElementById('privacy-popup').style.display = 'none';
+        }
+
         const FONTS = {
             "Italic": "𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻",
             "Bold": "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳",
