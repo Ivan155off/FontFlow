@@ -4,7 +4,7 @@ import json
 
 app = Flask(__name__)
 
-# --- ЛОГИКА ДЛЯ ВСЕХ ШРИФТОВ ---
+# --- ПОЛНАЯ ЛОГИКА ДЛЯ ВСЕХ ШРИФТОВ ---
 def get_dynamic_fonts(text):
     try:
         base_path = os.path.dirname(__file__)
@@ -22,7 +22,6 @@ def get_dynamic_fonts(text):
         print(f"Font error: {e}")
         return []
 
-# Иконка-ракета для всех вкладок
 FAVICON = '<link rel="icon" href="data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'.9em\' font-size=\'90\'>🚀</text></svg>">'
 
 INDEX_HTML = """
@@ -103,7 +102,7 @@ INDEX_HTML = """
         .seo-content p { color: #888; font-size: 0.85rem; line-height: 1.5; }
         
         footer { margin-top: 40px; padding-bottom: 20px; font-size: 0.8rem; opacity: 0.6; }
-        footer a { color: #aaa; text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; }
+        footer a { color: #aaa; text-decoration: none; border-bottom: 1px solid #444; transition: 0.3s; }
         footer a:hover { color: var(--p); border-bottom-color: var(--p); }
     </style>
 </head>
@@ -127,12 +126,14 @@ INDEX_HTML = """
 
         <div class="seo-content">
             <h2>What is Font Flow?</h2>
-            <p>Font Flow is a powerful online aesthetic text generator. We provide a wide range of fancy letters and cool symbols that you can copy and paste into your Discord, Telegram, or Instagram profiles.</p>
+            <p>Font Flow is a powerful online aesthetic text generator. We provide a wide range of fancy letters and cool symbols that you can copy and paste into your Discord, Telegram, or Instagram profiles. Our tool uses Unicode characters to ensure your stylish nicknames work across all modern platforms.</p>
             <h2>How to generate fancy fonts?</h2>
-            <p>Simply type your text in the box above. Our algorithm will instantly create font combinations, including italic, bold, monospace, and many aesthetic styles.</p>
+            <p>Simply type your text in the box above. Our algorithm will instantly create font combinations, including italic, bold, monospace, and many aesthetic styles. Click "Copy" to use the result anywhere instantly!</p>
         </div>
 
-        <footer>© 2026 Font Flow | <a href="/privacy">Privacy Policy</a></footer>
+        <footer>
+            © 2026 Font Flow | <a href="/privacy">Privacy Policy</a>
+        </footer>
     </div>
 
     <script>
@@ -187,53 +188,66 @@ PRIVACY_HTML = """
     <title>Privacy Policy - Font Flow</title>
     """ + FAVICON + """
     <style>
-        body { background: #080808; color: #aaa; font-family: 'Inter', sans-serif; line-height: 1.7; padding: 40px 20px; max-width: 900px; margin: 0 auto; }
-        h1 { color: #00ff88; border-bottom: 1px solid #222; padding-bottom: 10px; }
-        h2 { margin-top: 40px; color: #00ff88; font-size: 1.4rem; }
-        .box { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid #222; margin: 20px 0; }
-        strong { color: #fff; }
-        .back-btn { display: inline-block; margin-bottom: 20px; color: #00ff88; text-decoration: none; font-weight: bold; border: 1px solid #00ff88; padding: 10px 20px; border-radius: 10px; transition: 0.3s; }
+        body { background: #080808; color: #aaa; font-family: 'Inter', sans-serif; line-height: 1.8; padding: 40px 20px; max-width: 850px; margin: 0 auto; }
+        h1 { color: #00ff88; font-size: 2.2rem; border-bottom: 2px solid #1a1a1a; padding-bottom: 10px; }
+        h2 { color: #fff; margin-top: 40px; border-left: 4px solid #00ff88; padding-left: 15px; font-size: 1.4rem; }
+        .box { background: rgba(0,255,136,0.05); border: 1px solid rgba(0,255,136,0.2); padding: 20px; border-radius: 12px; margin: 25px 0; }
+        .back-btn { display: inline-block; margin-bottom: 30px; color: #00ff88; text-decoration: none; font-weight: bold; border: 1px solid #00ff88; padding: 8px 18px; border-radius: 8px; transition: 0.3s; }
         .back-btn:hover { background: #00ff88; color: #000; }
+        li { margin-bottom: 10px; }
     </style>
 </head>
 <body>
-    <a href="/" class="back-btn">← Back to Generator</a>
-    <h1>Comprehensive Privacy Policy</h1>
-    <p><strong>Effective Date:</strong> March 22, 2026</p>
-    
-    <p>Welcome to Font Flow. We are committed to protecting your personal information and your right to privacy. This policy describes how we collect, use, and safeguard your data when you visit our website.</p>
+    <a href="/" class="back-btn">← Back to Home</a>
+    <h1>Privacy Policy for Font Flow</h1>
+    <p><strong>Last updated:</strong> March 22, 2026</p>
+
+    <p>At Font Flow, we are committed to maintaining the trust and confidence of our visitors. This Privacy Policy details how we handle data in compliance with GDPR, CCPA, and COPPA.</p>
+
+    <h2>1. Consent</h2>
+    <p>By using our website, you hereby consent to our Privacy Policy and agree to its terms.</p>
+
+    <h2>2. Information We Collect</h2>
+    <p>We do not require any registration. We may collect information only when you contact us directly or via automated server logs (IP address, browser type, referring pages).</p>
+
+    <h2>3. How We Use Information</h2>
+    <p>We use the information to maintain the website, prevent fraud, analyze user behavior, and improve our font conversion algorithms.</p>
+
+    <h2>4. Log Files</h2>
+    <p>Font Flow follows a standard procedure of using log files. These files log visitors when they visit websites. This information is anonymous and used for technical administration.</p>
+
+    <h2>5. Cookies and Web Beacons</h2>
+    <p>We use cookies to store information about visitors' preferences and to customize our web page content based on browser type.</p>
+
+    <h2>6. Google DART Cookie</h2>
+    <p>Google uses DART cookies to serve ads to our users. You can opt out of these by visiting the Google ad privacy policy.</p>
+
+    <h2>7. Advertising Partners</h2>
+    <p>Our advertising partners (like Google AdSense) use cookies and web beacons to measure the effectiveness of their ads. We have no access to these third-party cookies.</p>
+
+    <h2>8. GDPR Data Protection Rights</h2>
+    <p>Users in the EU have the right to access, rectification, erasure, and restriction of processing of their data.</p>
+
+    <h2>9. CCPA Privacy Rights</h2>
+    <p>California consumers have the right to request disclosure of what data is collected and to request its deletion.</p>
 
     <div class="box">
-        <strong>Summary:</strong> We do not collect names, emails, or phone numbers. We use standard web tools (Cookies, AdSense, Analytics) to keep the service free and functional.
+        <h2>10. Children's Privacy (COPPA)</h2>
+        <p>Font Flow does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you believe your child has provided such info, contact us immediately for its removal.</p>
+        <ul>
+            <li>No accounts or social features for children.</li>
+            <li>No tracking of personal identities.</li>
+            <li>Safe Unicode-based text processing.</li>
+        </ul>
     </div>
 
-    <h2>1. Information We Collect Automatically</h2>
-    <p>When you visit Font Flow, our servers automatically record certain information sent by your browser (Log Files). This includes IP addresses, Browser type, OS, Referring URLs and Date/Time stamps.</p>
+    <h2>11. Data Security</h2>
+    <p>We use industry-standard security protocols. However, no internet transmission is 100% secure.</p>
 
-    <h2>2. Cookies and Tracking Technologies</h2>
-    <p>We use Cookies for Analytics, Advertising, and remembering your Preferences. You can disable them in your browser settings anytime.</p>
+    <h2>12. Contact Information</h2>
+    <p>For any privacy-related questions, please contact the site administrator via the contact details provided on the main page.</p>
 
-    <h2>3. Advertising Partners (Google AdSense)</h2>
-    <p>Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits. You may opt out of personalized advertising by visiting Google Ads Settings.</p>
-
-    <h2>4. Data Processing (Local Conversion)</h2>
-    <p>The text you enter into our generator is processed <strong>locally in your browser</strong>. We do not transmit or store the content of your messages on our servers.</p>
-
-    <h2>5. GDPR & CCPA Rights</h2>
-    <p>You have the right to access, erasure, and objection regarding any data we might have (primarily technical logs like IP).</p>
-
-    <h2>6. Children's Privacy Protection (Detailed)</h2>
-    <p>Font Flow does not knowingly collect any Personal Identifiable Information from children under the age of 13. Protecting children's privacy is our top priority.</p>
-    <ul>
-        <li><strong>No Personal Data:</strong> We never ask for names, photos, or locations.</li>
-        <li><strong>No Account Required:</strong> Children can use the generator without creating a profile.</li>
-        <li><strong>Parental Awareness:</strong> We encourage parents to monitor their children's online activities.</li>
-    </ul>
-
-    <h2>7. Policy Updates</h2>
-    <p>We reserve the right to update this policy. Check this page for changes.</p>
-    
-    <p style="text-align:center; margin-top:50px; font-size:0.8rem;">© 2026 Font Flow Project. All Rights Reserved.</p>
+    <p style="text-align:center; margin-top:50px; opacity:0.5;">© 2026 Font Flow Project</p>
 </body>
 </html>
 """
