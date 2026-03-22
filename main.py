@@ -49,35 +49,21 @@ INDEX_HTML = """
     
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --p: #00ff88; --s: #bd00ff; --bg: #080808; 
-            --gradient-speed: 25s;
-        }
+        :root { --p: #00ff88; --s: #bd00ff; --bg: #080808; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        /* --- НОВЫЙ РЕАЛИСТИЧНЫЙ АНИМИРОВАННЫЙ ФОН --- */
         body {
-            background: var(--bg);
-            /* Плавный перелив градиента по всей площади */
-            background-image: 
-                radial-gradient(at 10% 10%, rgba(0, 255, 136, 0.08) 0px, transparent 50%),
-                radial-gradient(at 90% 90%, rgba(189, 0, 255, 0.08) 0px, transparent 50%),
-                linear-gradient(135deg, #080808 0%, #0c0e12 50%, #080808 100%);
-            background-size: 200% 200%;
-            animation: flowingGradient var(--gradient-speed) ease infinite;
-            
-            color: #fff; font-family: 'Inter', sans-serif;
+            background: var(--bg); color: #fff; font-family: 'Inter', sans-serif;
             margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center;
             padding: 20px; overflow-x: hidden;
         }
-
-        @keyframes flowingGradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .bg-blobs {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; overflow: hidden; filter: blur(80px); opacity: 0.3;
         }
-
-        /* Убраны старые .bg-blobs, так как фон теперь встроен в body */
+        .blob { position: absolute; width: 300px; height: 300px; border-radius: 50%; animation: move 20s infinite alternate; }
+        .blob1 { background: var(--p); top: -10%; left: -10%; }
+        .blob2 { background: var(--s); bottom: -10%; right: -10%; animation-delay: -5s; }
+        @keyframes move { from { transform: translate(0,0); } to { transform: translate(100px, 100px); } }
         
         .container { width: 100%; max-width: 550px; text-align: center; z-index: 1; }
         
@@ -85,7 +71,7 @@ INDEX_HTML = """
             font-family: 'Syncopate', sans-serif; font-size: clamp(2rem, 10vw, 2.5rem);
             background: linear-gradient(90deg, var(--p), var(--s));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 8px; filter: drop-shadow(0 0 15px rgba(0,255,136,0.3));
+            margin-bottom: 8px; filter: drop-shadow(0 0 15px rgba(0,255,136,0.4));
         }
         .description { color: #aaa; font-size: 0.9rem; margin-bottom: 25px; opacity: 0.8; }
         
@@ -103,10 +89,10 @@ INDEX_HTML = """
         .card {
             background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
             padding: 16px 20px; border-radius: 14px; display: flex; justify-content: space-between;
-            align-items: center; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            align-items: center; cursor: pointer; transition: 0.3s;
             backdrop-filter: blur(5px);
         }
-        .card:hover { transform: translateY(-3px); border-color: var(--p); background: rgba(255,255,255,0.05); }
+        .card:hover { transform: translateY(-2px); border-color: var(--p); background: rgba(255,255,255,0.05); }
         .card:active { transform: scale(0.98); }
         .card span { font-size: 1.2rem; text-align: left; flex: 1; padding-right: 15px; overflow-wrap: anywhere; }
         
@@ -132,6 +118,7 @@ INDEX_HTML = """
     </style>
 </head>
 <body>
+    <div class="bg-blobs"><div class="blob blob1"></div><div class="blob blob2"></div></div>
     <div class="container">
         <h1>FONT FLOW</h1>
         <div class="description">Elevate your style for social media and games</div>
@@ -226,46 +213,22 @@ PRIVACY_HTML = """
     <title>Privacy Policy - Font Flow</title>
     """ + FAVICON + """
     <style>
-        :root { 
-            --p: #00ff88; --s: #bd00ff; --bg: #080808; 
-            --gradient-speed: 25s;
-        }
-        
-        /* Плавный анимированный фон также и для страницы политики */
-        body { 
-            background: var(--bg);
-            background-image: 
-                radial-gradient(at 10% 10%, rgba(0, 255, 136, 0.08) 0px, transparent 50%),
-                radial-gradient(at 90% 90%, rgba(189, 0, 255, 0.08) 0px, transparent 50%),
-                linear-gradient(135deg, #080808 0%, #0c0e12 50%, #080808 100%);
-            background-size: 200% 200%;
-            animation: flowingGradient var(--gradient-speed) ease infinite;
-            
-            color: #ccc; font-family: 'Inter', sans-serif; padding: 40px; line-height: 1.6; max-width: 850px; margin: 0 auto; 
-        }
-
-        @keyframes flowingGradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
+        body { background: #080808; color: #ccc; font-family: 'Inter', sans-serif; padding: 40px; line-height: 1.6; max-width: 850px; margin: 0 auto; }
         h1 { color: #00ff88; font-family: sans-serif; font-size: 2.2rem; }
         h2 { color: #fff; margin-top: 35px; border-left: 4px solid #bd00ff; padding-left: 15px; font-size: 1.3rem; }
         p { margin-bottom: 15px; color: #aaa; font-size: 0.95rem; }
         ul { color: #aaa; margin-bottom: 25px; padding-left: 20px; }
         li { margin-bottom: 12px; font-size: 0.9rem; }
         strong { color: #fff; }
-        
         .back-link { 
             display: inline-block; margin-top: 50px; color: #00ff88; text-decoration: none; 
-            font-weight: bold; transition: all 0.2s ease; padding: 12px 25px; border: 1px solid #00ff88; border-radius: 10px;
+            font-weight: bold; transition: all 0.3s ease; padding: 12px 25px; border: 1px solid #00ff88; border-radius: 10px;
         }
         .back-link:hover { background: #00ff88; color: #000; transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,255,136,0.2); }
         
-        /* --- ДОБАВЛЕНА АНИМАЦИЯ НАЖАТИЯ --- */
+        /* --- ЭФФЕКТ НАЖАТИЯ --- */
         .back-link:active { transform: scale(0.95); transition: 0.1s; }
-
+        
     </style>
 </head>
 <body>
