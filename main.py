@@ -4,7 +4,7 @@ import json
 
 app = Flask(__name__)
 
-# --- ПОЛНАЯ ЛОГИКА (БЕЗ ВЫРЕЗАНИЙ) ---
+# --- ПОЛНАЯ ЛОГИКА ШРИФТОВ ---
 def get_dynamic_fonts(text):
     try:
         base_path = os.path.dirname(__file__)
@@ -23,70 +23,91 @@ def get_dynamic_fonts(text):
 
 FAVICON = '<link rel="icon" href="data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'.9em\' font-size=\'90\'>🚀</text></svg>">'
 
-# ТВОЙ ОРИГИНАЛЬНЫЙ INDEX С ПОЛНЫМ НАБОРОМ ШРИФТОВ И АНИМАЦИЙ
+# --- ОБЩИЕ СТИЛИ С АНИМАЦИЯМИ ДЛЯ ВСЕХ СТРАНИЦ ---
+COMMON_STYLE = """
+<style>
+    :root { --p: #00ff88; --s: #bd00ff; --bg: #080808; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+    body {
+        background: var(--bg); color: #fff; font-family: 'Inter', sans-serif;
+        margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+        padding: 20px; overflow-x: hidden;
+    }
+    .bg-blobs {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        z-index: -1; overflow: hidden; filter: blur(80px); opacity: 0.3;
+    }
+    .blob { position: absolute; width: 300px; height: 300px; border-radius: 50%; animation: move 20s infinite alternate; }
+    .blob1 { background: var(--p); top: -10%; left: -10%; }
+    .blob2 { background: var(--s); bottom: -10%; right: -10%; animation-delay: -5s; }
+    @keyframes move { from { transform: translate(0,0); } to { transform: translate(100px, 100px); } }
+    
+    .container { width: 100%; max-width: 550px; text-align: center; z-index: 1; }
+    
+    /* Анимация появления контента */
+    .fade-in { animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    h1 {
+        font-family: 'Syncopate', sans-serif; font-size: clamp(2rem, 10vw, 2.5rem);
+        background: linear-gradient(90deg, var(--p), var(--s));
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        margin-bottom: 8px; filter: drop-shadow(0 0 15px rgba(0,255,136,0.4));
+    }
+
+    .content-box { 
+        background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); 
+        padding: 25px; border-radius: 20px; text-align: left; margin-top: 20px;
+        backdrop-filter: blur(10px); transition: 0.3s;
+    }
+    .content-box:hover { border-color: rgba(0,255,136,0.2); background: rgba(255,255,255,0.03); }
+
+    .back-btn {
+        display: inline-block; margin-top: 30px; padding: 12px 25px; border: 1px solid var(--p);
+        color: var(--p); text-decoration: none; border-radius: 12px; font-weight: bold;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .back-btn:hover { background: var(--p); color: #000; transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,255,136,0.3); }
+    .back-btn:active { transform: scale(0.92); }
+
+    footer { margin-top: 60px; padding: 20px 0; width: 100%; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; }
+    footer a { 
+        color: #666; text-decoration: none; margin: 0 12px; font-size: 0.85rem; 
+        transition: all 0.3s ease; display: inline-block;
+    }
+    footer a:hover { color: var(--p); transform: translateY(-2px); }
+    footer a:active { transform: scale(0.9); }
+</style>
+"""
+
 INDEX_HTML = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Font Flow — Stylish Text Generator & Aesthetic Fonts</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Font Flow — Stylish Text Generator</title>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P4Q7YLZLBC"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-P4Q7YLZLBC');
-    </script>
-    
-    <meta name="google-site-verification" content="OO6lpx6rkPkflDspe23xGNja4sRaQ3yb0Z3JoKuy5kE" />
-    """ + FAVICON + """
+    <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-P4Q7YLZLBC'); </script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2712778222245542" crossorigin="anonymous"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    """ + FAVICON + COMMON_STYLE + """
     <style>
-        :root { --p: #00ff88; --s: #bd00ff; --bg: #080808; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            background: var(--bg); color: #fff; font-family: 'Inter', sans-serif;
-            margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center;
-            padding: 20px; overflow-x: hidden;
-        }
-        .bg-blobs {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; overflow: hidden; filter: blur(80px); opacity: 0.3;
-        }
-        .blob { position: absolute; width: 300px; height: 300px; border-radius: 50%; animation: move 20s infinite alternate; }
-        .blob1 { background: var(--p); top: -10%; left: -10%; }
-        .blob2 { background: var(--s); bottom: -10%; right: -10%; animation-delay: -5s; }
-        @keyframes move { from { transform: translate(0,0); } to { transform: translate(100px, 100px); } }
-        
-        .container { width: 100%; max-width: 550px; text-align: center; z-index: 1; }
-        h1 {
-            font-family: 'Syncopate', sans-serif; font-size: clamp(2rem, 10vw, 2.5rem);
-            background: linear-gradient(90deg, var(--p), var(--s));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 8px; filter: drop-shadow(0 0 15px rgba(0,255,136,0.4));
-        }
-        .description { color: #aaa; font-size: 0.9rem; margin-bottom: 25px; opacity: 0.8; }
-        
         textarea {
-            width: 100%; padding: 20px; border-radius: 15px; 
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
-            color: #fff; font-size: 1.1rem; outline: none; transition: 0.4s;
+            width: 100%; padding: 20px; border-radius: 15px; background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1); color: #fff; font-size: 1.1rem; outline: none; transition: 0.4s;
             backdrop-filter: blur(10px);
         }
-        textarea:focus { border-color: var(--p); background: rgba(255,255,255,0.06); }
+        textarea:focus { border-color: var(--p); background: rgba(255,255,255,0.06); box-shadow: 0 0 20px rgba(0,255,136,0.1); }
 
         .results { margin-top: 25px; display: grid; gap: 12px; width: 100%; }
         .card {
             background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
             padding: 16px 20px; border-radius: 14px; display: flex; justify-content: space-between;
-            align-items: center; cursor: pointer; transition: 0.3s;
+            align-items: center; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .card:hover { transform: translateY(-2px); border-color: var(--p); background: rgba(255,255,255,0.05); }
-        .card:active { transform: scale(0.98); }
+        .card:hover { transform: translateX(8px); border-color: var(--p); background: rgba(255,255,255,0.05); }
+        .card:active { transform: scale(0.96); }
         
         .copy-btn { 
             background: rgba(255,255,255,0.08); color: #fff; padding: 8px 16px; 
@@ -96,28 +117,15 @@ INDEX_HTML = """
         .card:hover .copy-btn { background: var(--p); color: #000; }
         .copied .copy-btn { background: var(--s) !important; color: #fff !important; }
 
-        /* ВЕРНУЛ ЭФФЕКТЫ */
         .strike span { text-decoration: line-through; }
         .underline span { text-decoration: underline; }
-
-        .seo-content { margin-top: 40px; text-align: left; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
-        .seo-content h2 { color: var(--p); font-size: 1.1rem; margin-top: 15px; }
-        .seo-content p { color: #888; font-size: 0.85rem; line-height: 1.5; }
-
-        footer { margin-top: 40px; padding-bottom: 20px; font-size: 0.8rem; opacity: 0.6; }
-        footer a { color: #aaa; text-decoration: none; margin: 0 10px; transition: 0.3s; }
-        footer a:hover { color: var(--p); }
-        
-        /* КНОПКА НАЗАД ДЛЯ НОВЫХ СТРАНИЦ */
-        .back-link { display: inline-block; margin-top: 30px; padding: 10px 20px; border: 1px solid var(--p); color: var(--p); text-decoration: none; border-radius: 10px; transition: 0.3s; }
-        .back-link:hover { background: var(--p); color: #000; }
     </style>
 </head>
-<body>
+<body class="fade-in">
     <div class="bg-blobs"><div class="blob blob1"></div><div class="blob blob2"></div></div>
     <div class="container">
         <h1>FONT FLOW</h1>
-        <div class="description">Elevate your style for social media and games</div>
+        <div style="color:#aaa; font-size:0.9rem; margin-bottom:25px;">Stylish fonts for social media and games</div>
         
         <textarea id="input" placeholder="Type your text here..."></textarea>
         
@@ -132,24 +140,27 @@ INDEX_HTML = """
             {% endif %}
         </div>
 
-        <div class="seo-content">
-            <h2>Frequently Asked Questions</h2>
-            <p><strong>How to use?</strong> Just type your text and click copy. Our generator uses Unicode characters to ensure compatibility with Discord, Instagram, and TikTok.</p>
+        <div class="content-box" style="margin-top:50px;">
+            <h2 style="color:var(--p); font-size:1.1rem; margin-top:0;">What is Font Flow?</h2>
+            <p style="color:#888; font-size:0.85rem; line-height:1.6;">Font Flow is a powerful aesthetic text generator. Use fancy letters and cool symbols for Discord, Telegram, or Instagram. Our tool uses Unicode characters to work across all modern platforms.</p>
         </div>
 
         <footer>
-            © 2026 Font Flow | <a href="/about">About</a> | <a href="/contact">Contact</a> | <a href="/privacy">Privacy</a>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/privacy">Privacy</a>
+            <p style="opacity: 0.3; margin-top: 15px; font-size: 0.7rem;">© 2026 Font Flow Project</p>
         </footer>
     </div>
 
     <script>
-        // ВЕРНУЛ ВСЕ 8+ ШРИФТОВ
         const FONTS = {
             "Italic": "𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻",
             "Bold": "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳",
-            "Monospace": "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄傳ＷＸＹ𝚉𝚊𝚋𝚌𝚍ｅ𝚏𝚐ｈ𝚒𝚓𝚔𝚕𝕞𝚗𝚘𝚙𝚚𝚛𝘴𝚝𝚞𝚠𝚡𝚢𝚣",
+            "Monospace": "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅Ｗ𝚇𝚈𝚉𝚊𝚋𝚌𝚍ｅ𝚏𝚐ｈ𝚒𝚓𝚔𝚕𝕞𝚗𝚘𝚙𝚚𝚛𝘴𝚝𝚞𝚠𝚡𝚢𝚣",
             "Bubbles": "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ",
-            "Small Caps": "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ",
+            "Small Caps": "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ",
             "Upside": "ɐqɔpǝɟƃɥᴉɾʞꞁɯuodbɹsʇnʌʍxʎzⱯᗷᑐᗡEᖵᘐHIᘀKꞀWNOᗡᑐᖴS⊥∩ΛM᙭⅄Z",
             "Script": "𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓓𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃",
             "Fraktur": "𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ𝔞𝔟𝔠𝔡𝔢𝔣𝔫𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷"
@@ -165,7 +176,7 @@ INDEX_HTML = """
             setTimeout(() => {
                 el.classList.remove('copied');
                 el.querySelector('.copy-btn').innerText = "COPY";
-            }, 1200);
+            }, 1000);
         }
 
         input.oninput = function() {
@@ -181,7 +192,6 @@ INDEX_HTML = """
                 }
                 oldContent += `<div class='card' onclick="copyDynamic(this, '${res}')"><span>${res}</span><div class='copy-btn'>COPY</div></div>`;
             }
-            // CSS СТИЛИ
             oldContent += `<div class='card strike' onclick="copyDynamic(this, '${val}')"><span>${val}</span><div class='copy-btn'>COPY</div></div>`;
             oldContent += `<div class='card underline' onclick="copyDynamic(this, '${val}')"><span>${val}</span><div class='copy-btn'>COPY</div></div>`;
             output.innerHTML = oldContent;
@@ -191,19 +201,25 @@ INDEX_HTML = """
 </html>
 """
 
-# ВЕРНУЛ PRIVACY_HTML И ДОБАВИЛ НОВЫЕ СТРАНИЦЫ
 ABOUT_HTML = """
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><title>About - Font Flow</title>""" + FAVICON + """
-<style>body{background:#080808;color:#ccc;font-family:sans-serif;padding:40px;text-align:center;} .box{max-width:600px;margin:0 auto;background:rgba(255,255,255,0.02);padding:30px;border-radius:20px;border:1px solid rgba(255,255,255,0.05); text-align:left;} h1{color:#00ff88;} .back{display:inline-block;margin-top:20px;color:#00ff88;text-decoration:none;border:1px solid #00ff88;padding:10px 20px;border-radius:10px;}</style></head>
-<body>
-    <div class="box">
-        <h1>About Project</h1>
-        <p>I am a student from Ukraine, learning web development. Font Flow is my personal experiment with Python and Flask. I created it to help people make their social media profiles more unique.</p>
-        <p>Everything you see here is processed in your browser. No data is stored, and no tracking is done beyond basic analytics to improve the tool.</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Font Flow</title>
+    """ + FAVICON + COMMON_STYLE + """
+</head>
+<body class="fade-in">
+    <div class="container">
+        <h1>ABOUT US</h1>
+        <div class="content-box">
+            <p>Welcome to <strong>Font Flow</strong>. I am a student from <strong>Ukraine</strong> who is passionate about building tools that help people express themselves online.</p>
+            <p>Living in <strong>Kharkiv</strong>, I spend my time learning Python and web technologies. This site is my first big step in creating useful web applications for the gaming and social media community.</p>
+            <p>I believe that even a small tool like a font generator can make someone's digital experience more fun and personal.</p>
+        </div>
+        <a href="/" class="back-btn">← Back to Generator</a>
     </div>
-    <a href="/" class="back">← Back</a>
 </body>
 </html>
 """
@@ -211,15 +227,52 @@ ABOUT_HTML = """
 CONTACT_HTML = """
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><title>Contact - Font Flow</title>""" + FAVICON + """
-<style>body{background:#080808;color:#ccc;font-family:sans-serif;padding:40px;text-align:center;} .box{max-width:600px;margin:0 auto;background:rgba(255,255,255,0.02);padding:30px;border-radius:20px;border:1px solid rgba(255,255,255,0.05);} h1{color:#00ff88;} .back{display:inline-block;margin-top:20px;color:#00ff88;text-decoration:none;border:1px solid #00ff88;padding:10px 20px;border-radius:10px;}</style></head>
-<body>
-    <div class="box">
-        <h1>Contact</h1>
-        <p>Suggestions? Bug reports? Email me at:</p>
-        <p style="color:#bd00ff; font-weight:bold;">support@fontflow.onrender.com</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Font Flow</title>
+    """ + FAVICON + COMMON_STYLE + """
+</head>
+<body class="fade-in">
+    <div class="container">
+        <h1>CONTACT</h1>
+        <div class="content-box" style="text-align: center;">
+            <p>Have questions or suggestions?</p>
+            <p>Feel free to reach out via email:</p>
+            <p style="color: var(--p); font-weight: bold; font-size: 1.1rem; margin: 20px 0;">support@fontflow.onrender.com</p>
+            <p style="font-size: 0.8rem; opacity: 0.7;">I try to reply to everyone as soon as possible.</p>
+        </div>
+        <a href="/" class="back-btn">← Back to Generator</a>
     </div>
-    <a href="/" class="back">← Back</a>
+</body>
+</html>
+"""
+
+# ВЕРНУЛ ТЕКСТ PRIVACY POLICY ЧТОБЫ НЕ БЫЛО ОШИБКИ
+PRIVACY_HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Font Flow</title>
+    """ + FAVICON + COMMON_STYLE + """
+    <style>h2{color:var(--p); font-size:1.1rem; margin-top:20px;} li{margin-bottom:10px; color:#aaa; font-size:0.9rem;}</style>
+</head>
+<body class="fade-in">
+    <div class="container">
+        <h1>PRIVACY POLICY</h1>
+        <div class="content-box">
+            <p>At Font Flow, we take your privacy seriously. This policy explains what data we handle.</p>
+            <h2>1. No Data Collection</h2>
+            <p>The text you type in our generator is processed <strong>locally</strong> in your browser. We do not store your text on our servers.</p>
+            <h2>2. Cookies and Ads</h2>
+            <p>We use Google AdSense and Google Analytics. These services may use cookies to show relevant ads and analyze site traffic.</p>
+            <h2>3. Children's Privacy</h2>
+            <p>We do not knowingly collect personal data from children. Since we don't have accounts, your identity remains anonymous.</p>
+        </div>
+        <a href="/" class="back-btn">← Back to Generator</a>
+    </div>
 </body>
 </html>
 """
@@ -237,7 +290,7 @@ def about(): return render_template_string(ABOUT_HTML)
 def contact(): return render_template_string(CONTACT_HTML)
 
 @app.route('/privacy')
-def privacy(): return render_template_string(PRIVACY_HTML) # (Тут твоя переменная PRIVACY_HTML)
+def privacy(): return render_template_string(PRIVACY_HTML)
 
 @app.route('/ads.txt')
 def ads_txt():
