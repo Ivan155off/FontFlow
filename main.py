@@ -4,7 +4,7 @@ import json
 
 app = Flask(__name__)
 
-# --- ПОЛНАЯ ЛОГИКА ШРИФТОВ ---
+# --- ЛОГИКА ШРИФТОВ (ПОЛНАЯ) ---
 def get_dynamic_fonts(text):
     try:
         base_path = os.path.dirname(__file__)
@@ -23,7 +23,7 @@ def get_dynamic_fonts(text):
 
 FAVICON = '<link rel="icon" href="data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'.9em\' font-size=\'90\'>🚀</text></svg>">'
 
-# --- ОБЩИЕ СТИЛИ С АНИМАЦИЯМИ ДЛЯ ВСЕХ СТРАНИЦ ---
+# --- ГЛОБАЛЬНЫЕ СТИЛИ И АНИМАЦИИ ---
 COMMON_STYLE = """
 <style>
     :root { --p: #00ff88; --s: #bd00ff; --bg: #080808; }
@@ -42,41 +42,40 @@ COMMON_STYLE = """
     .blob2 { background: var(--s); bottom: -10%; right: -10%; animation-delay: -5s; }
     @keyframes move { from { transform: translate(0,0); } to { transform: translate(100px, 100px); } }
     
-    .container { width: 100%; max-width: 550px; text-align: center; z-index: 1; }
+    .container { width: 100%; max-width: 650px; text-align: center; z-index: 1; }
     
-    /* Анимация появления контента */
-    .fade-in { animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
     h1 {
-        font-family: 'Syncopate', sans-serif; font-size: clamp(2rem, 10vw, 2.5rem);
+        font-family: 'Syncopate', sans-serif; font-size: clamp(2rem, 10vw, 2.8rem);
         background: linear-gradient(90deg, var(--p), var(--s));
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        margin-bottom: 8px; filter: drop-shadow(0 0 15px rgba(0,255,136,0.4));
+        margin-bottom: 10px; filter: drop-shadow(0 0 15px rgba(0,255,136,0.4));
     }
 
     .content-box { 
         background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); 
-        padding: 25px; border-radius: 20px; text-align: left; margin-top: 20px;
-        backdrop-filter: blur(10px); transition: 0.3s;
+        padding: 30px; border-radius: 24px; text-align: left; margin-top: 25px;
+        backdrop-filter: blur(12px); transition: all 0.4s ease;
     }
-    .content-box:hover { border-color: rgba(0,255,136,0.2); background: rgba(255,255,255,0.03); }
+    .content-box:hover { border-color: var(--p); transform: scale(1.01); background: rgba(255,255,255,0.04); }
 
     .back-btn {
-        display: inline-block; margin-top: 30px; padding: 12px 25px; border: 1px solid var(--p);
-        color: var(--p); text-decoration: none; border-radius: 12px; font-weight: bold;
+        display: inline-block; margin-top: 35px; padding: 14px 28px; border: 1px solid var(--p);
+        color: var(--p); text-decoration: none; border-radius: 14px; font-weight: 900;
+        text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .back-btn:hover { background: var(--p); color: #000; transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,255,136,0.3); }
-    .back-btn:active { transform: scale(0.92); }
+    .back-btn:hover { background: var(--p); color: #000; transform: translateY(-4px) scale(1.05); box-shadow: 0 8px 25px rgba(0,255,136,0.4); }
+    .back-btn:active { transform: scale(0.95); }
 
-    footer { margin-top: 60px; padding: 20px 0; width: 100%; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; }
+    footer { margin-top: 60px; padding: 30px 0; width: 100%; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; }
     footer a { 
-        color: #666; text-decoration: none; margin: 0 12px; font-size: 0.85rem; 
-        transition: all 0.3s ease; display: inline-block;
+        color: #777; text-decoration: none; margin: 0 15px; font-size: 0.9rem; 
+        transition: all 0.3s ease; display: inline-block; font-weight: 500;
     }
-    footer a:hover { color: var(--p); transform: translateY(-2px); }
-    footer a:active { transform: scale(0.9); }
+    footer a:hover { color: var(--p); transform: translateY(-3px); }
 </style>
 """
 
@@ -85,36 +84,33 @@ INDEX_HTML = """
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Font Flow — Stylish Text Generator</title>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P4Q7YLZLBC"></script>
-    <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-P4Q7YLZLBC'); </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Font Flow — Aesthetic Text Generator</title>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2712778222245542" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     """ + FAVICON + COMMON_STYLE + """
     <style>
         textarea {
-            width: 100%; padding: 20px; border-radius: 15px; background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1); color: #fff; font-size: 1.1rem; outline: none; transition: 0.4s;
-            backdrop-filter: blur(10px);
+            width: 100%; padding: 22px; border-radius: 18px; background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1); color: #fff; font-size: 1.15rem; outline: none; transition: 0.4s;
+            backdrop-filter: blur(10px); box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
         }
-        textarea:focus { border-color: var(--p); background: rgba(255,255,255,0.06); box-shadow: 0 0 20px rgba(0,255,136,0.1); }
+        textarea:focus { border-color: var(--p); background: rgba(255,255,255,0.07); box-shadow: 0 0 30px rgba(0,255,136,0.15); }
 
-        .results { margin-top: 25px; display: grid; gap: 12px; width: 100%; }
+        .results { margin-top: 30px; display: grid; gap: 14px; width: 100%; }
         .card {
             background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
-            padding: 16px 20px; border-radius: 14px; display: flex; justify-content: space-between;
-            align-items: center; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 18px 24px; border-radius: 16px; display: flex; justify-content: space-between;
+            align-items: center; cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .card:hover { transform: translateX(8px); border-color: var(--p); background: rgba(255,255,255,0.05); }
-        .card:active { transform: scale(0.96); }
+        .card:hover { transform: scale(1.03) translateX(10px); border-color: var(--p); background: rgba(255,255,255,0.06); }
+        .card:active { transform: scale(0.97); }
         
         .copy-btn { 
-            background: rgba(255,255,255,0.08); color: #fff; padding: 8px 16px; 
-            border-radius: 10px; font-weight: 700; font-size: 0.7rem; 
-            text-transform: uppercase; transition: 0.3s; min-width: 85px; text-align: center;
+            background: rgba(255,255,255,0.1); color: #fff; padding: 10px 18px; 
+            border-radius: 12px; font-weight: 800; font-size: 0.75rem; transition: 0.3s;
         }
-        .card:hover .copy-btn { background: var(--p); color: #000; }
+        .card:hover .copy-btn { background: var(--p); color: #000; box-shadow: 0 0 15px rgba(0,255,136,0.5); }
         .copied .copy-btn { background: var(--s) !important; color: #fff !important; }
 
         .strike span { text-decoration: line-through; }
@@ -125,7 +121,7 @@ INDEX_HTML = """
     <div class="bg-blobs"><div class="blob blob1"></div><div class="blob blob2"></div></div>
     <div class="container">
         <h1>FONT FLOW</h1>
-        <div style="color:#aaa; font-size:0.9rem; margin-bottom:25px;">Stylish fonts for social media and games</div>
+        <p style="color:#888; margin-bottom:30px; font-weight:500;">Transform your text into aesthetic art</p>
         
         <textarea id="input" placeholder="Type your text here..."></textarea>
         
@@ -140,17 +136,16 @@ INDEX_HTML = """
             {% endif %}
         </div>
 
-        <div class="content-box" style="margin-top:50px;">
-            <h2 style="color:var(--p); font-size:1.1rem; margin-top:0;">What is Font Flow?</h2>
-            <p style="color:#888; font-size:0.85rem; line-height:1.6;">Font Flow is a powerful aesthetic text generator. Use fancy letters and cool symbols for Discord, Telegram, or Instagram. Our tool uses Unicode characters to work across all modern platforms.</p>
+        <div class="content-box">
+            <h2 style="color:var(--p); font-size:1.2rem; margin-top:0;">Why Use Font Flow?</h2>
+            <p style="color:#aaa; line-height:1.7; font-size:0.9rem;">Our tool generates unique combinations that work perfectly for <b>Discord</b>, <b>Roblox</b>, or <b>Social Media</b>. No installation required — just copy and paste!</p>
         </div>
 
         <footer>
-            <a href="/">Home</a>
             <a href="/about">About</a>
             <a href="/contact">Contact</a>
             <a href="/privacy">Privacy</a>
-            <p style="opacity: 0.3; margin-top: 15px; font-size: 0.7rem;">© 2026 Font Flow Project</p>
+            <p style="opacity: 0.2; margin-top: 20px; font-size: 0.75rem;">© 2026 Font Flow. All Rights Reserved.</p>
         </footer>
     </div>
 
@@ -172,7 +167,7 @@ INDEX_HTML = """
         function copyDynamic(el, text) {
             navigator.clipboard.writeText(text);
             el.classList.add('copied');
-            el.querySelector('.copy-btn').innerText = "DONE!";
+            el.querySelector('.copy-btn').innerText = "COPIED!";
             setTimeout(() => {
                 el.classList.remove('copied');
                 el.querySelector('.copy-btn').innerText = "COPY";
@@ -207,16 +202,16 @@ ABOUT_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - Font Flow</title>
+    <title>About Us - Font Flow</title>
     """ + FAVICON + COMMON_STYLE + """
 </head>
 <body class="fade-in">
     <div class="container">
         <h1>ABOUT US</h1>
         <div class="content-box">
-            <p>Welcome to <strong>Font Flow</strong>. I am a student from <strong>Ukraine</strong> who is passionate about building tools that help people express themselves online.</p>
-            <p>Living in <strong>Kharkiv</strong>, I spend my time learning Python and web technologies. This site is my first big step in creating useful web applications for the gaming and social media community.</p>
-            <p>I believe that even a small tool like a font generator can make someone's digital experience more fun and personal.</p>
+            <p>Welcome to <strong>Font Flow</strong>. I am a student from <strong>Ukraine</strong> who is passionate about coding and creating aesthetic web tools.</p>
+            <p>I started this project to learn modern web technologies like <strong>Python and JavaScript</strong>. My goal was to create a clean, fast, and free font generator for gamers and social media creators.</p>
+            <p>I believe in a web where tools are simple, useful, and respect user privacy. Font Flow is a part of my journey to becoming a developer.</p>
         </div>
         <a href="/" class="back-btn">← Back to Generator</a>
     </div>
@@ -237,10 +232,10 @@ CONTACT_HTML = """
     <div class="container">
         <h1>CONTACT</h1>
         <div class="content-box" style="text-align: center;">
-            <p>Have questions or suggestions?</p>
-            <p>Feel free to reach out via email:</p>
-            <p style="color: var(--p); font-weight: bold; font-size: 1.1rem; margin: 20px 0;">support@fontflow.onrender.com</p>
-            <p style="font-size: 0.8rem; opacity: 0.7;">I try to reply to everyone as soon as possible.</p>
+            <p>Feedback or suggestions?</p>
+            <p>Email me at:</p>
+            <p style="color: var(--p); font-weight: 900; font-size: 1.2rem; margin: 25px 0;">support@fontflow.onrender.com</p>
+            <p style="font-size: 0.85rem; color: #777;">I usually respond within 48 hours.</p>
         </div>
         <a href="/" class="back-btn">← Back to Generator</a>
     </div>
@@ -248,7 +243,6 @@ CONTACT_HTML = """
 </html>
 """
 
-# ВЕРНУЛ ТЕКСТ PRIVACY POLICY ЧТОБЫ НЕ БЫЛО ОШИБКИ
 PRIVACY_HTML = """
 <!DOCTYPE html>
 <html lang="en">
@@ -257,21 +251,53 @@ PRIVACY_HTML = """
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - Font Flow</title>
     """ + FAVICON + COMMON_STYLE + """
-    <style>h2{color:var(--p); font-size:1.1rem; margin-top:20px;} li{margin-bottom:10px; color:#aaa; font-size:0.9rem;}</style>
+    <style>
+        h2 { color: var(--p); font-size: 1.3rem; margin-top: 30px; border-bottom: 1px solid rgba(0,255,136,0.1); padding-bottom: 10px; }
+        p, li { color: #aaa; font-size: 0.95rem; line-height: 1.8; margin-bottom: 15px; }
+        strong { color: #fff; }
+        ul { padding-left: 20px; text-align: left; }
+    </style>
 </head>
 <body class="fade-in">
-    <div class="container">
-        <h1>PRIVACY POLICY</h1>
+    <div class="container" style="max-width: 800px; text-align: left;">
+        <h1 style="text-align: center;">PRIVACY POLICY</h1>
         <div class="content-box">
-            <p>At Font Flow, we take your privacy seriously. This policy explains what data we handle.</p>
-            <h2>1. No Data Collection</h2>
-            <p>The text you type in our generator is processed <strong>locally</strong> in your browser. We do not store your text on our servers.</p>
-            <h2>2. Cookies and Ads</h2>
-            <p>We use Google AdSense and Google Analytics. These services may use cookies to show relevant ads and analyze site traffic.</p>
-            <h2>3. Children's Privacy</h2>
-            <p>We do not knowingly collect personal data from children. Since we don't have accounts, your identity remains anonymous.</p>
+            <p><i>Last Updated: March 24, 2026</i></p>
+            <p>At <strong>Font Flow</strong>, we are committed to protecting the privacy and safety of our users. This detailed policy explains how we handle data and our dedication to internet safety.</p>
+
+            <h2>1. Our Privacy Mission: Zero-Data Collection</h2>
+            <p>We operate on a "Privacy-First" principle. Font Flow is a client-side tool, meaning all font transformations happen <strong>locally on your computer or phone</strong>. The text you input is never uploaded, stored, or processed on our servers. We believe your creative text is your business, not ours.</p>
+
+            <h2>2. Children's Online Privacy Protection (COPPA)</h2>
+            <p>Protecting children online is our absolute priority. Font Flow is designed to be a safe, clean environment for users of all ages, including children under 13.</p>
+            <ul>
+                <li><strong>No Registration Required:</strong> We never ask for names, emails, ages, or any personal identification.</li>
+                <li><strong>No Profile Building:</strong> We do not track individual behavior or create "user profiles" of any kind.</li>
+                <li><strong>Strict Ad Filtering:</strong> We strive to ensure that any advertisements shown are family-friendly and comply with COPPA regulations regarding tracking.</li>
+            </ul>
+            <p>If you are a parent and believe your child has accidentally provided personal information, please contact us immediately for its removal.</p>
+
+            <h2>3. Transparency on Log Files</h2>
+            <p>Like almost every website, our hosting provider (Render) automatically collects standard log files. This information includes IP addresses, browser types, Internet Service Providers (ISP), and date/time stamps. This data is strictly used for technical maintenance, preventing bot attacks, and ensuring the website stays online. This information is <strong>not</strong> linked to your personal identity.</p>
+
+            <h2>4. Third-Party Services (Google AdSense/Analytics)</h2>
+            <p>To keep this tool free, we use Google AdSense to show advertisements and Google Analytics to understand site traffic. These partners may use cookies or web beacons to serve ads based on your visit to this and other sites. You can choose to disable cookies in your browser settings or visit the Google Ad Settings page to manage your preferences.</p>
+
+            <h2>5. Data Security</h2>
+            <p>Even though we do not collect personal text, we secure our website using SSL (HTTPS) encryption to ensure that your connection to our generator is safe and cannot be intercepted by third parties.</p>
+
+            <h2>6. User Rights & GDPR</h2>
+            <p>If you are a resident of the European Economic Area (EEA), you have rights regarding your data. Since we do not collect personal data (like names or emails), we have no data to "delete" or "transfer." However, you have the right to browse anonymously and manage your cookie settings at any time.</p>
+
+            <h2>7. External Links</h2>
+            <p>Our website may contain links to other sites. We are not responsible for the content or privacy practices of those external websites. We encourage you to read their policies before providing any information.</p>
+
+            <h2>8. Contacting Us</h2>
+            <p>If you have any questions about this massive policy or how we protect your privacy, feel free to reach out to us at <strong>support@fontflow.onrender.com</strong>. We are always happy to clarify our practices.</p>
         </div>
-        <a href="/" class="back-btn">← Back to Generator</a>
+        <div style="text-align: center;">
+            <a href="/" class="back-btn">← Back to Generator</a>
+        </div>
     </div>
 </body>
 </html>
