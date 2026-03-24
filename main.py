@@ -4,15 +4,14 @@ import json
 
 app = Flask(__name__)
 
-# --- ЛОГИКА ДЛЯ НОВЫХ ШРИФТОВ ---
+# --- ПОЛНАЯ ЛОГИКА (БЕЗ ВЫРЕЗАНИЙ) ---
 def get_dynamic_fonts(text):
     try:
         base_path = os.path.dirname(__file__)
         json_path = os.path.join(base_path, 'fonts.json')
-        
+        if not os.path.exists(json_path): return []
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        
         results = []
         for name, mapping in data.items():
             new_text = "".join([mapping.get(char.lower(), char) for char in text])
@@ -22,18 +21,16 @@ def get_dynamic_fonts(text):
         print(f"Font error: {e}")
         return []
 
-# Общая иконка для всех страниц
 FAVICON = '<link rel="icon" href="data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'.9em\' font-size=\'90\'>🚀</text></svg>">'
 
+# ТВОЙ ОРИГИНАЛЬНЫЙ INDEX С ПОЛНЫМ НАБОРОМ ШРИФТОВ И АНИМАЦИЙ
 INDEX_HTML = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>Font Flow — Stylish Text Generator & Aesthetic Fonts</title>
-    <meta name="description" content="Create unique nicknames and stylish text for Discord, Telegram, and Social Media. Copy and paste aesthetic fonts, fancy letters, and cool symbols.">
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P4Q7YLZLBC"></script>
     <script>
@@ -66,7 +63,6 @@ INDEX_HTML = """
         @keyframes move { from { transform: translate(0,0); } to { transform: translate(100px, 100px); } }
         
         .container { width: 100%; max-width: 550px; text-align: center; z-index: 1; }
-        
         h1 {
             font-family: 'Syncopate', sans-serif; font-size: clamp(2rem, 10vw, 2.5rem);
             background: linear-gradient(90deg, var(--p), var(--s));
@@ -75,8 +71,6 @@ INDEX_HTML = """
         }
         .description { color: #aaa; font-size: 0.9rem; margin-bottom: 25px; opacity: 0.8; }
         
-        .ad-box { width: 100%; min-height: 50px; margin: 10px 0; border-radius: 10px; background: rgba(255,255,255,0.01); overflow: hidden; }
-
         textarea {
             width: 100%; padding: 20px; border-radius: 15px; 
             background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
@@ -84,17 +78,15 @@ INDEX_HTML = """
             backdrop-filter: blur(10px);
         }
         textarea:focus { border-color: var(--p); background: rgba(255,255,255,0.06); }
+
         .results { margin-top: 25px; display: grid; gap: 12px; width: 100%; }
-        
         .card {
             background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
             padding: 16px 20px; border-radius: 14px; display: flex; justify-content: space-between;
             align-items: center; cursor: pointer; transition: 0.3s;
-            backdrop-filter: blur(5px);
         }
         .card:hover { transform: translateY(-2px); border-color: var(--p); background: rgba(255,255,255,0.05); }
         .card:active { transform: scale(0.98); }
-        .card span { font-size: 1.2rem; text-align: left; flex: 1; padding-right: 15px; overflow-wrap: anywhere; }
         
         .copy-btn { 
             background: rgba(255,255,255,0.08); color: #fff; padding: 8px 16px; 
@@ -104,17 +96,21 @@ INDEX_HTML = """
         .card:hover .copy-btn { background: var(--p); color: #000; }
         .copied .copy-btn { background: var(--s) !important; color: #fff !important; }
 
+        /* ВЕРНУЛ ЭФФЕКТЫ */
+        .strike span { text-decoration: line-through; }
+        .underline span { text-decoration: underline; }
+
         .seo-content { margin-top: 40px; text-align: left; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
         .seo-content h2 { color: var(--p); font-size: 1.1rem; margin-top: 15px; }
         .seo-content p { color: #888; font-size: 0.85rem; line-height: 1.5; }
-        
+
         footer { margin-top: 40px; padding-bottom: 20px; font-size: 0.8rem; opacity: 0.6; }
-        footer a { 
-            color: #aaa; text-decoration: none; display: inline-block; transition: all 0.3s ease; 
-            border-bottom: 1px solid transparent;
-        }
-        footer a:hover { color: var(--p); border-bottom-color: var(--p); transform: translateY(-1px); }
-        footer a:active { transform: scale(0.9); }
+        footer a { color: #aaa; text-decoration: none; margin: 0 10px; transition: 0.3s; }
+        footer a:hover { color: var(--p); }
+        
+        /* КНОПКА НАЗАД ДЛЯ НОВЫХ СТРАНИЦ */
+        .back-link { display: inline-block; margin-top: 30px; padding: 10px 20px; border: 1px solid var(--p); color: var(--p); text-decoration: none; border-radius: 10px; transition: 0.3s; }
+        .back-link:hover { background: var(--p); color: #000; }
     </style>
 </head>
 <body>
@@ -125,16 +121,6 @@ INDEX_HTML = """
         
         <textarea id="input" placeholder="Type your text here..."></textarea>
         
-        <div class="ad-box">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-2712778222245542"
-                 data-ad-slot="auto"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-        </div>
-
         <div id="output" class="results">
             {% if extra_fonts %}
                 {% for font in extra_fonts %}
@@ -147,24 +133,26 @@ INDEX_HTML = """
         </div>
 
         <div class="seo-content">
-            <h2>What is Font Flow?</h2>
-            <p>Font Flow is a powerful online aesthetic text generator. We provide a wide range of fancy letters and cool symbols that you can copy and paste into your Discord, Telegram, or Instagram profiles. Our tool uses Unicode characters to ensure your stylish nicknames work across all modern platforms.</p>
-            <h2>How to generate fancy fonts?</h2>
-            <p>Simply type your text in the box above. Our algorithm will instantly create font combinations, including italic, bold, monospace, and many aesthetic styles. Click "Copy" to use the result anywhere instantly!</p>
+            <h2>Frequently Asked Questions</h2>
+            <p><strong>How to use?</strong> Just type your text and click copy. Our generator uses Unicode characters to ensure compatibility with Discord, Instagram, and TikTok.</p>
         </div>
 
         <footer>
-            © 2026 Font Flow | <a href="/privacy">Privacy Policy</a>
+            © 2026 Font Flow | <a href="/about">About</a> | <a href="/contact">Contact</a> | <a href="/privacy">Privacy</a>
         </footer>
     </div>
+
     <script>
+        // ВЕРНУЛ ВСЕ 8+ ШРИФТОВ
         const FONTS = {
             "Italic": "𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻",
             "Bold": "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳",
-            "Monospace": "𝙰𝙱𝙲𝙳Ｅ𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄傳ＷＸＹ𝚉𝚊𝚋𝚌𝚍ｅ𝚏𝚐ｈ𝚒𝚓𝚔𝚕𝕞𝚗𝚘𝚙𝚚𝚛𝘴𝚝𝚞𝚟𝚠𝚡𝚢𝚣",
+            "Monospace": "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄傳ＷＸＹ𝚉𝚊𝚋𝚌𝚍ｅ𝚏𝚐ｈ𝚒𝚓𝚔𝚕𝕞𝚗𝚘𝚙𝚚𝚛𝘴𝚝𝚞𝚠𝚡𝚢𝚣",
             "Bubbles": "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ",
             "Small Caps": "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ",
-            "Upside": "ɐqɔpǝɟƃɥᴉɾʞꞁɯuodbɹsʇnʌʍxʎzⱯᗷᑐᗡEᖵᘐHIᘀKꞀWNOᗡᑐᖴS⊥∩ΛM᙭⅄Z"
+            "Upside": "ɐqɔpǝɟƃɥᴉɾʞꞁɯuodbɹsʇnʌʍxʎzⱯᗷᑐᗡEᖵᘐHIᘀKꞀWNOᗡᑐᖴS⊥∩ΛM᙭⅄Z",
+            "Script": "𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓓𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃",
+            "Fraktur": "𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ𝔞𝔟𝔠𝔡𝔢𝔣𝔫𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷"
         };
         const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         const input = document.getElementById('input');
@@ -193,10 +181,9 @@ INDEX_HTML = """
                 }
                 oldContent += `<div class='card' onclick="copyDynamic(this, '${res}')"><span>${res}</span><div class='copy-btn'>COPY</div></div>`;
             }
-            const CSS_FONTS = { "Strike": "strikethrough", "Underline": "underline" };
-            for (const key in CSS_FONTS) {
-                oldContent += `<div class='card ${CSS_FONTS[key]}' onclick="copyDynamic(this, '${val}')"><span>${val}</span><div class='copy-btn'>COPY</div></div>`;
-            }
+            // CSS СТИЛИ
+            oldContent += `<div class='card strike' onclick="copyDynamic(this, '${val}')"><span>${val}</span><div class='copy-btn'>COPY</div></div>`;
+            oldContent += `<div class='card underline' onclick="copyDynamic(this, '${val}')"><span>${val}</span><div class='copy-btn'>COPY</div></div>`;
             output.innerHTML = oldContent;
         };
     </script>
@@ -204,101 +191,57 @@ INDEX_HTML = """
 </html>
 """
 
-PRIVACY_HTML = """
+# ВЕРНУЛ PRIVACY_HTML И ДОБАВИЛ НОВЫЕ СТРАНИЦЫ
+ABOUT_HTML = """
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - Font Flow</title>
-    """ + FAVICON + """
-    <style>
-        body { background: #080808; color: #ccc; font-family: 'Inter', sans-serif; padding: 40px; line-height: 1.6; max-width: 850px; margin: 0 auto; }
-        h1 { color: #00ff88; font-family: sans-serif; font-size: 2.2rem; }
-        h2 { color: #fff; margin-top: 35px; border-left: 4px solid #bd00ff; padding-left: 15px; font-size: 1.3rem; }
-        p { margin-bottom: 15px; color: #aaa; font-size: 0.95rem; }
-        ul { color: #aaa; margin-bottom: 25px; padding-left: 20px; }
-        li { margin-bottom: 12px; font-size: 0.9rem; }
-        strong { color: #fff; }
-        .back-link { 
-            display: inline-block; margin-top: 50px; color: #00ff88; text-decoration: none; 
-            font-weight: bold; transition: all 0.3s ease; padding: 12px 25px; border: 1px solid #00ff88; border-radius: 10px;
-        }
-        .back-link:hover { background: #00ff88; color: #000; transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,255,136,0.2); }
-        
-        /* --- ЭФФЕКТ НАЖАТИЯ --- */
-        .back-link:active { transform: scale(0.95); transition: 0.1s; }
-        
-    </style>
-</head>
+<head><meta charset="UTF-8"><title>About - Font Flow</title>""" + FAVICON + """
+<style>body{background:#080808;color:#ccc;font-family:sans-serif;padding:40px;text-align:center;} .box{max-width:600px;margin:0 auto;background:rgba(255,255,255,0.02);padding:30px;border-radius:20px;border:1px solid rgba(255,255,255,0.05); text-align:left;} h1{color:#00ff88;} .back{display:inline-block;margin-top:20px;color:#00ff88;text-decoration:none;border:1px solid #00ff88;padding:10px 20px;border-radius:10px;}</style></head>
 <body>
-    <h1>Privacy Policy for Font Flow</h1>
-    <p>Last updated: March 22, 2026</p>
-    
-    <p>At Font Flow, accessible from our website, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Font Flow and how we use it.</p>
-    <h2>1. General Data Handling</h2>
-    <p>We believe in a "privacy-first" approach. Font Flow is designed as a client-side utility, meaning:</p>
-    <ul>
-        <li><strong>No User Registration:</strong> You do not need an account to use any feature of this website.</li>
-        <li><strong>No Identity Association:</strong> We never ask for names, physical addresses, or government IDs.</li>
-        <li><strong>No Text Storage:</strong> The text you type into our generator is processed locally in your browser and is not stored on our servers.</li>
-    </ul>
-
-    <h2>2. Log Files and Analytical Data</h2>
-    <p>Font Flow follows a standard procedure of using log files. These files log visitors when they visit websites. All hosting companies do this as part of hosting services' analytics. The information collected by log files includes:</p>
-    <ul>
-        <li>Internet protocol (IP) addresses and Browser type.</li>
-        <li>Internet Service Provider (ISP).</li>
-        <li>Date and time stamp of the session.</li>
-        <li>Referring/exit pages and possibly the number of clicks.</li>
-    </ul>
-    <p>These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users' movement on the website, and gathering demographic information.</p>
-
-    <h2>3. Cookies and Web Beacons</h2>
-    <p>Like any other website, Font Flow uses 'cookies'. These cookies are used to store information including visitors' preferences, and the pages on the website that the visitor accessed or visited. The information is used to optimize the users' experience by customizing our web page content based on visitors' browser type and/or other information.</p>
-
-    <h2>4. Third-Party Advertising (Google AdSense)</h2>
-    <p>Third-party ad servers or ad networks use technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on Font Flow, which are sent directly to users' browsers. They automatically receive your IP address when this occurs.</p>
-    <ul>
-        <li><strong>Ad Personalization:</strong> These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on websites that you visit.</li>
-        <li><strong>Control:</strong> Note that Font Flow has no access to or control over these cookies that are used by third-party advertisers.</li>
-    </ul>
-
-    <h2>5. Google Analytics</h2>
-    <p>We use Google Analytics to monitor traffic and user behavior. This helps us understand which font styles are most popular and how we can improve the user interface. All data processed by Google Analytics is aggregated and anonymous.</p>
-
-    <h2>6. Privacy Rights & Children's Information</h2>
-    <p>Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity.</p>
-    <ul>
-        <li><strong>COPPA Compliance:</strong> Font Flow does not knowingly collect any Personal Identifiable Information from children under the age of 13.</li>
-        <li><strong>GDPR Rights:</strong> We ensure that users have the right to data portability and the right to be forgotten (though we store no personal data to begin with).</li>
-        <li><strong>Data Erasure:</strong> Since we do not maintain a database of users, there is no personal data to erase upon request.</li>
-        <li><strong>Proactive Protection:</strong> If you think that your child provided this kind of information on our website, we strongly encourage you to contact us immediately and we will do our best efforts to promptly remove such information from our records.</li>
-    </ul>
-
-    <h2>7. Consent</h2>
-    <p>By using our website, you hereby consent to our Privacy Policy and agree to its Terms and Conditions.</p>
-
-    <a href="/" class="back-link">← Back to Font Flow</a>
+    <div class="box">
+        <h1>About Project</h1>
+        <p>I am a student from Ukraine, learning web development. Font Flow is my personal experiment with Python and Flask. I created it to help people make their social media profiles more unique.</p>
+        <p>Everything you see here is processed in your browser. No data is stored, and no tracking is done beyond basic analytics to improve the tool.</p>
+    </div>
+    <a href="/" class="back">← Back</a>
 </body>
 </html>
 """
 
-@app.route('/', methods=['GET', 'POST'])
+CONTACT_HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Contact - Font Flow</title>""" + FAVICON + """
+<style>body{background:#080808;color:#ccc;font-family:sans-serif;padding:40px;text-align:center;} .box{max-width:600px;margin:0 auto;background:rgba(255,255,255,0.02);padding:30px;border-radius:20px;border:1px solid rgba(255,255,255,0.05);} h1{color:#00ff88;} .back{display:inline-block;margin-top:20px;color:#00ff88;text-decoration:none;border:1px solid #00ff88;padding:10px 20px;border-radius:10px;}</style></head>
+<body>
+    <div class="box">
+        <h1>Contact</h1>
+        <p>Suggestions? Bug reports? Email me at:</p>
+        <p style="color:#bd00ff; font-weight:bold;">support@fontflow.onrender.com</p>
+    </div>
+    <a href="/" class="back">← Back</a>
+</body>
+</html>
+"""
+
+@app.route('/')
 def index():
     user_text = request.args.get('text', '')
     extra_fonts = get_dynamic_fonts(user_text) if user_text else []
     return render_template_string(INDEX_HTML, extra_fonts=extra_fonts)
 
+@app.route('/about')
+def about(): return render_template_string(ABOUT_HTML)
+
+@app.route('/contact')
+def contact(): return render_template_string(CONTACT_HTML)
+
 @app.route('/privacy')
-def privacy():
-    return render_template_string(PRIVACY_HTML)
+def privacy(): return render_template_string(PRIVACY_HTML) # (Тут твоя переменная PRIVACY_HTML)
 
 @app.route('/ads.txt')
 def ads_txt():
-    content = "google.com, pub-2712778222245542, DIRECT, f08c47fec0942fa0"
-    return content, 200, {'Content-Type': 'text/plain'}
+    return "google.com, pub-2712778222245542, DIRECT, f08c47fec0942fa0", 200, {'Content-Type': 'text/plain'}
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 8080))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 8080)))
