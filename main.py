@@ -21,7 +21,7 @@ def get_dynamic_fonts(text):
         print(f"Font error: {e}")
         return []
 
-FAVICON = '<link rel="icon" href="data:image/svg+xml,<svg xmlns=\\\'http://www.w3.org/2000/svg\\\' viewBox=\\\'0 0 100 100\\\'><text y=\\\'0.9em\\\' font-size=\\\'90\\\'></text></svg>">'
+FAVICON = '<link rel="icon" href="data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'.9em\' font-size=\'90\'>🚀</text></svg>">'
 
 COMMON_STYLE = """
 <style>
@@ -56,32 +56,33 @@ COMMON_STYLE = """
         padding: 25px 20px; border-radius: 24px; text-align: left; margin-top: 25px;
         backdrop-filter: blur(12px); transition: all 0.4s ease;
     }
-    .back-btn {
-        display: inline-block; margin-top: 35px; padding: 14px 28px; border: 1px solid var(--p);
-        color: var(--p); text-decoration: none; border-radius: 14px; font-weight: 900;
-        text-transform: uppercase; transition: all 0.3s ease;
+    
+    /* Анимация для кнопок меню и "Back to home" */
+    .back-btn, footer a {
+        display: inline-block;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .back-btn:hover { background: var(--p); color: #000; transform: translateY(-4px); }
+    .back-btn:active, footer a:active {
+        transform: scale(0.9) !important;
+        opacity: 0.7;
+    }
+
+    .back-btn {
+        margin-top: 35px; padding: 14px 28px; border: 1px solid var(--p);
+        color: var(--p); text-decoration: none; border-radius: 14px; font-weight: 900;
+        text-transform: uppercase;
+    }
+    .back-btn:hover { background: var(--p); color: #000; transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,255,136,0.2); }
 
     footer { margin-top: 40px; padding-bottom: 20px; font-size: 0.8rem; opacity: 0.6; }
-    footer a { color: #aaa; text-decoration: none; margin: 0 10px; transition: 0.3s; }
+    footer a { color: #aaa; text-decoration: none; margin: 0 10px; }
     footer a:hover { color: var(--p); }
 
-    /* Мобильная адаптация */
     @media (max-width: 768px) {
         body { padding: 10px; }
         .container { max-width: 100%; padding: 0 5px; }
         .content-box { padding: 20px 15px; margin-top: 20px; }
         h1 { font-size: clamp(1.5rem, 7vw, 2.2rem); margin-bottom: 15px; }
-        .back-btn { padding: 12px 24px; font-size: 0.85rem; }
-        footer { font-size: 0.75rem; margin-top: 30px; }
-    }
-    
-    @media (max-width: 480px) {
-        body { padding: 8px; }
-        .content-box { padding: 18px 12px; border-radius: 20px; }
-        h1 { font-size: clamp(1.4rem, 6vw, 2rem); }
-        .back-btn { padding: 11px 20px; margin-top: 25px; }
     }
 </style>
 """
@@ -104,22 +105,39 @@ INDEX_HTML = """
         textarea:focus { border-color: var(--p); background: rgba(255,255,255,0.07); box-shadow: 0 0 30px rgba(0,255,136,0.15); }
         .ad-slot { width: 100%; min-height: 90px; margin: 20px 0; background: rgba(255,255,255,0.01); border-radius: 12px; overflow: hidden; }
         .results { margin-top: 25px; display: grid; gap: 14px; width: 100%; }
+        
         .card {
             background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
             padding: 18px 24px; border-radius: 16px; display: flex; justify-content: space-between;
-            align-items: center; cursor: pointer; transition: 0.3s;
+            align-items: center; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .card:hover { transform: translateY(-2px); border-color: var(--p); }
+        .card:hover { transform: translateY(-2px); border-color: var(--p); background: rgba(255,255,255,0.04); }
+        .card:active { transform: scale(0.98); }
+        
         .card span { font-size: 1.25rem; text-align: left; word-break: break-word; }
-        .copy-btn { background: rgba(255,255,255,0.08); color: #fff; padding: 10px 18px; border-radius: 12px; font-weight: 800; font-size: 0.75rem; }
-        .card:hover .copy-btn { background: var(--p); color: #000; box-shadow: 0 0 15px rgba(0,255,136,0.5); }
-        .copied .copy-btn { background: var(--s) !important; color: #fff !important; }
+        
+        /* КРАСИВАЯ АНИМАЦИЯ КНОПКИ КНИПИРОВАНИЯ */
+        .copy-btn { 
+            background: rgba(255,255,255,0.08); color: #fff; padding: 10px 18px; 
+            border-radius: 12px; font-weight: 800; font-size: 0.75rem;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            min-width: 85px; text-align: center;
+        }
+        .card:hover .copy-btn { background: var(--p); color: #000; }
+        
+        .copied .copy-btn { 
+            background: var(--s) !important; 
+            color: #fff !important;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--s);
+        }
+
         .underline span { text-decoration: underline; }
         .strikethrough span { text-decoration: line-through; }
+        
         @media (max-width: 768px) {
             .card { padding: 16px 20px; flex-direction: column; text-align: center; gap: 12px; }
             .card span { font-size: 1.1rem; }
-            .copy-btn { padding: 8px 16px; font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -132,12 +150,7 @@ INDEX_HTML = """
         <textarea id="input" placeholder="Type or paste your text..."></textarea>
         
         <div class="ad-slot">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-2712778222245542"
-                 data-ad-slot="auto"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2712778222245542" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
 
@@ -151,11 +164,10 @@ INDEX_HTML = """
         </footer>
     </div>
     <script>
-        // ИСПРАВЛЕННЫЙ JS (ОБРАБОТКА UNDEFINED)
         const FONTS = {
             "Italic": "𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻",
             "Bold": "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳",
-            "Monospace": "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂ＴＵＶＷＸＹ𝚉𝚊𝚋𝚌𝚍ｅ𝚏𝚐ｈ𝚒𝚓𝚔𝚕𝕞𝚗𝚘𝚙𝚚𝚛𝘴𝚝𝚞𝚠𝚡𝚢𝚣",
+            "Monospace": "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂ＴＵＶＷＸＹ𝚉𝚊𝚋𝚌𝚍ｅｆ𝚐ｈ𝚒𝚓𝚔𝚕𝕞𝚗𝚘𝚙𝚚𝚛𝘴𝘵𝚞𝚠𝚡𝚢𝚣",
             "Bubbles": "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ",
             "Small Caps": "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ",
             "Upside": "ɐqɔpǝɟƃɥᴉɾʞꞁɯuodbɹsʇnʌʍxʎzⱯᗷᑐᗡEᖵᘐHIᘀKꞀWNOᗡᑐᖴS⊥∩ΛM᙭⅄Z",
@@ -169,8 +181,12 @@ INDEX_HTML = """
         function copyDynamic(el, text) {
             navigator.clipboard.writeText(text);
             el.classList.add('copied');
-            el.querySelector('.copy-btn').innerText = "COPIED!";
-            setTimeout(() => { el.classList.remove('copied'); el.querySelector('.copy-btn').innerText = "COPY"; }, 1000);
+            const btn = el.querySelector('.copy-btn');
+            btn.innerText = "COPIED!";
+            setTimeout(() => { 
+                el.classList.remove('copied'); 
+                btn.innerText = "COPY"; 
+            }, 1200);
         }
 
         input.oninput = function() {
@@ -182,7 +198,6 @@ INDEX_HTML = """
                 let textToProcess = (key === "Upside") ? val.split("").reverse().join("") : val;
                 for(let c of textToProcess) {
                     let i = alpha.indexOf(c);
-                    // ИСПРАВЛЕНИЕ: если индекса нет (это цифра или символ), берем оригинал
                     res += (i !== -1 && FONTS[key][i]) ? FONTS[key][i] : c;
                 }
                 content += `<div class='card' onclick="copyDynamic(this, '${res.replace(/'/g, "\\'")}')"><span>${res}</span><div class='copy-btn'>COPY</div></div>`;
@@ -263,22 +278,11 @@ PRIVACY_HTML = """
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     """ + FAVICON + COMMON_STYLE + """
     <style>
-        h2 { 
-            color: var(--p); font-size: clamp(1.1rem, 3.5vw, 1.3rem); 
-            margin: 30px 0 20px 0; 
-            border-bottom: 1px solid rgba(0,255,136,0.1); 
-            padding-bottom: 10px; 
-        }
-        p, li { 
-            color: #aaa; font-size: clamp(0.85rem, 2.5vw, 0.95rem); 
-            line-height: 1.7; margin-bottom: 15px; 
-        }
+        h2 { color: var(--p); font-size: clamp(1.1rem, 3.5vw, 1.3rem); margin: 30px 0 20px 0; border-bottom: 1px solid rgba(0,255,136,0.1); padding-bottom: 10px; }
+        p, li { color: #aaa; font-size: clamp(0.85rem, 2.5vw, 0.95rem); line-height: 1.7; margin-bottom: 15px; }
         strong { color: #fff; }
         ul { padding-left: 20px; text-align: left; margin: 10px 0; }
-        .container { max-width: 100%; }
-        @media (min-width: 769px) {
-            .container { max-width: 800px; }
-        }
+        @media (min-width: 769px) { .container { max-width: 800px; } }
     </style>
 </head>
 <body class="fade-in">
@@ -288,40 +292,18 @@ PRIVACY_HTML = """
         <div class="content-box">
             <p><i>Last Updated: March 25, 2026</i></p>
             <p>At <strong>Font Flow</strong>, we are committed to protecting the privacy of our visitors. This policy document outlines the types of information we handle.</p>
-
             <h2>1. Our Mission: Zero Data Collection</h2>
             <p>We believe your data is your business. Font Flow is designed as a client-side tool. This means all font transformations happen <strong>locally in your browser</strong>. We do not upload your text to our servers, we do not store it, and we do not share it.</p>
-
-            <h2>2. Children's Online Privacy Protection (COPPA Focus)</h2>
-            <p>Protecting children's safety online is our absolute priority. Font Flow is designed to be a safe, clean utility for users of all ages:</p>
-            <ul>
-                <li><strong>No Registration:</strong> We never ask for names, ages, emails, or personal identification.</li>
-                <li><strong>No Tracking:</strong> We do not build individual profiles or track behavior.</li>
-                <li><strong>Safe Content:</strong> Our tool does not allow for user communication, preventing any form of online unwanted contact.</li>
-            </ul>
-
+            <h2>2. Children's Online Privacy Protection</h2>
+            <p>Protecting children's safety online is our absolute priority. Font Flow is designed to be a safe, clean utility for users of all ages.</p>
             <h2>3. Log Files and Analytics</h2>
-            <p>Font Flow follows a standard procedure of using log files (common practice for hosting providers). This information includes IP addresses, browser types, and date/time stamps. We use this strictly for security and standard site maintenance.</p>
-            <p>We use <strong>Google Analytics</strong> to anonymously monitor traffic. This helps us see how many users visit us and which features are popular. All data is aggregated and kept private.</p>
-
-            <h2>4. Third-Party Ads (Google AdSense) and Cookies</h2>
-            <p>To keep Font Flow free, we use Google AdSense. Google may use cookies to serve ads based on your visit. You can manage cookies in your browser settings or visit Google's ad settings page.</p>
-
-            <h2>5. Data Security</h2>
-            <p>We use industry-standard SSL (HTTPS) encryption to ensure that your connection to our generator is safe and secure.</p>
-
-            <h2>6. Your GDPR Rights</h2>
-            <p>If you are a resident of the EEA, you have rights regarding your data. Since we do not collect personal data, we have no data to delete or transfer, but you are always anonymous here.</p>
-
-            <h2>7. External Links</h2>
-            <p>Our site may contain links to other websites. We are not responsible for their content or privacy policies. Please read them separately.</p>
-
-            <h2>8. Contact Us</h2>
+            <p>Font Flow follows a standard procedure of using log files. We use <strong>Google Analytics</strong> to anonymously monitor traffic.</p>
+            <h2>4. Third-Party Ads (Google AdSense)</h2>
+            <p>To keep Font Flow free, we use Google AdSense. Google may use cookies to serve ads based on your visit.</p>
+            <h2>5. Contact Us</h2>
             <p>If you have any questions regarding this detailed Privacy Policy, please reach us at <strong>fontflow.help@gmail.com</strong>.</p>
         </div>
-        <div style="text-align: center;">
-            <a href="/" class="back-btn">← Back to home</a>
-        </div>
+        <div style="text-align: center;"><a href="/" class="back-btn">← Back to home</a></div>
         <footer>
             <a href="/about">About</a>
             <a href="/contact">Contact</a>
