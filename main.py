@@ -57,10 +57,9 @@ COMMON_STYLE = """
         backdrop-filter: blur(12px); transition: all 0.4s ease;
     }
     
-    /* Анимация для кнопок меню и "Back to home" */
     .back-btn, footer a {
         display: inline-block;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .back-btn:active, footer a:active {
         transform: scale(0.9) !important;
@@ -75,8 +74,14 @@ COMMON_STYLE = """
     .back-btn:hover { background: var(--p); color: #000; transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,255,136,0.2); }
 
     footer { margin-top: 40px; padding-bottom: 20px; font-size: 0.8rem; opacity: 0.6; }
+    
+    /* ОБНОВЛЕННАЯ АНИМАЦИЯ ДЛЯ ССЫЛОК В ФУТЕРЕ */
     footer a { color: #aaa; text-decoration: none; margin: 0 10px; }
-    footer a:hover { color: var(--p); }
+    footer a:hover { 
+        color: var(--p); 
+        transform: scale(1.15); /* Увеличиваем при наведении */
+        text-shadow: 0 0 10px rgba(0,255,136,0.5);
+    }
 
     @media (max-width: 768px) {
         body { padding: 10px; }
@@ -116,7 +121,6 @@ INDEX_HTML = """
         
         .card span { font-size: 1.25rem; text-align: left; word-break: break-word; }
         
-        /* КРАСИВАЯ АНИМАЦИЯ КНОПКИ КНИПИРОВАНИЯ */
         .copy-btn { 
             background: rgba(255,255,255,0.08); color: #fff; padding: 10px 18px; 
             border-radius: 12px; font-weight: 800; font-size: 0.75rem;
