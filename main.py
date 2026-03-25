@@ -75,11 +75,10 @@ COMMON_STYLE = """
 
     footer { margin-top: 40px; padding-bottom: 20px; font-size: 0.8rem; opacity: 0.6; }
     
-    /* ОБНОВЛЕННАЯ АНИМАЦИЯ ДЛЯ ССЫЛОК В ФУТЕРЕ */
     footer a { color: #aaa; text-decoration: none; margin: 0 10px; }
     footer a:hover { 
         color: var(--p); 
-        transform: scale(1.15); /* Увеличиваем при наведении */
+        transform: scale(1.15);
         text-shadow: 0 0 10px rgba(0,255,136,0.5);
     }
 
@@ -171,7 +170,7 @@ INDEX_HTML = """
         const FONTS = {
             "Italic": "𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻",
             "Bold": "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳",
-            "Monospace": "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂ＴＵＶＷＸＹ𝚉𝚊𝚋𝚌𝚍ｅｆ𝚐ｈ𝚒𝚓𝚔𝚕𝕞𝚗𝚘𝚙𝚚𝚛𝘴𝘵𝚞𝚠𝚡𝚢𝚣",
+            "Monospace": "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂ＴＵＶＷＸＹ𝚉𝚊𝚋𝚌𝚍ｅ𝚏𝚐ｈ𝚒𝚓𝚔𝚕𝕞𝚗𝚘𝚙𝚚𝚛𝘴𝘵𝚞𝚠𝚡𝚢𝚣",
             "Bubbles": "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ",
             "Small Caps": "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ",
             "Upside": "ɐqɔpǝɟƃɥᴉɾʞꞁɯuodbɹsʇnʌʍxʎzⱯᗷᑐᗡEᖵᘐHIᘀKꞀWNOᗡᑐᖴS⊥∩ΛM᙭⅄Z",
@@ -282,10 +281,10 @@ PRIVACY_HTML = """
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     """ + FAVICON + COMMON_STYLE + """
     <style>
-        h2 { color: var(--p); font-size: clamp(1.1rem, 3.5vw, 1.3rem); margin: 30px 0 20px 0; border-bottom: 1px solid rgba(0,255,136,0.1); padding-bottom: 10px; }
-        p, li { color: #aaa; font-size: clamp(0.85rem, 2.5vw, 0.95rem); line-height: 1.7; margin-bottom: 15px; }
+        h2 { color: var(--p); font-size: clamp(1.1rem, 3.5vw, 1.3rem); margin: 30px 0 15px 0; border-bottom: 1px solid rgba(0,255,136,0.1); padding-bottom: 8px; }
+        p, li { color: #aaa; font-size: clamp(0.85rem, 2.5vw, 0.95rem); line-height: 1.6; margin-bottom: 12px; }
         strong { color: #fff; }
-        ul { padding-left: 20px; text-align: left; margin: 10px 0; }
+        ul { padding-left: 18px; text-align: left; margin: 10px 0; }
         @media (min-width: 769px) { .container { max-width: 800px; } }
     </style>
 </head>
@@ -295,17 +294,34 @@ PRIVACY_HTML = """
         <h1 style="text-align: center;">PRIVACY POLICY</h1>
         <div class="content-box">
             <p><i>Last Updated: March 25, 2026</i></p>
-            <p>At <strong>Font Flow</strong>, we are committed to protecting the privacy of our visitors. This policy document outlines the types of information we handle.</p>
-            <h2>1. Our Mission: Zero Data Collection</h2>
-            <p>We believe your data is your business. Font Flow is designed as a client-side tool. This means all font transformations happen <strong>locally in your browser</strong>. We do not upload your text to our servers, we do not store it, and we do not share it.</p>
-            <h2>2. Children's Online Privacy Protection</h2>
-            <p>Protecting children's safety online is our absolute priority. Font Flow is designed to be a safe, clean utility for users of all ages.</p>
-            <h2>3. Log Files and Analytics</h2>
-            <p>Font Flow follows a standard procedure of using log files. We use <strong>Google Analytics</strong> to anonymously monitor traffic.</p>
-            <h2>4. Third-Party Ads (Google AdSense)</h2>
-            <p>To keep Font Flow free, we use Google AdSense. Google may use cookies to serve ads based on your visit.</p>
-            <h2>5. Contact Us</h2>
-            <p>If you have any questions regarding this detailed Privacy Policy, please reach us at <strong>fontflow.help@gmail.com</strong>.</p>
+            <p>Welcome to <strong>Font Flow</strong>. Your privacy is critically important to us. This Privacy Policy document describes how we handle information when you use our website.</p>
+            
+            <h2>1. Information We Do NOT Collect</h2>
+            <p>Font Flow is built as a <strong>Privacy-First</strong> utility. We do not require account registration, and we do not collect personal information such as your name, email address, or phone number. Any text you enter into our generator is processed locally in your browser and is <strong>never</strong> uploaded to our servers.</p>
+            
+            <h2>2. Log Files and Technical Data</h2>
+            <p>Like most websites, we use log files to ensure site security and stability. This information includes your IP address, browser type, ISP, and date/time stamps. This data is not linked to any information that is personally identifiable.</p>
+            
+            <h2>3. Cookies and Web Beacons</h2>
+            <p>We use cookies to improve your experience. Cookies are small files stored on your device that help us remember your preferences. You can choose to disable cookies through your individual browser options.</p>
+            
+            <h2>4. Third-Party Advertising (Google AdSense)</h2>
+            <p>We use Google AdSense to serve ads. Google, as a third-party vendor, uses cookies to serve ads based on your prior visits to Font Flow or other websites. Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to our sites and/or other sites on the Internet.</p>
+            
+            <h2>5. Analytics (Google Analytics)</h2>
+            <p>We use Google Analytics to understand how visitors interact with our site. This helps us optimize performance. Google Analytics collects information anonymously and reports website trends without identifying individual visitors.</p>
+            
+            <h2>6. Children's Information</h2>
+            <p>Another part of our priority is adding protection for children while using the internet. Font Flow does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you think that your child provided this kind of information on our website, we strongly encourage you to contact us immediately.</p>
+            
+            <h2>7. Data Security</h2>
+            <p>We implement a variety of security measures to maintain the safety of your browsing session, including SSL (Secure Sockets Layer) technology to ensure your connection is encrypted.</p>
+            
+            <h2>8. Consent</h2>
+            <p>By using our website, you hereby consent to our Privacy Policy and agree to its Terms and Conditions.</p>
+
+            <h2>9. Contact Us</h2>
+            <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us at <strong>fontflow.help@gmail.com</strong>.</p>
         </div>
         <div style="text-align: center;"><a href="/" class="back-btn">← Back to home</a></div>
         <footer>
